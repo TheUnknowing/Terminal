@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progression Powerlifting</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #111;
+            color: #eee;
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 20px;
+            animation: fadeIn 2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1, h2 {
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px #00ff88;
+            animation: fadeIn 2s ease;
+        }
+
+        canvas {
+            background: #222;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #00aaff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li::before {
+            content: "\2714\0020"; /* checkmark */
+            color: #00ff88;
+        }
+
+        .video-list li::before {
+            content: none; /* Supprime le checkmark */
+        }
+
+        .icon {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+
+        .lift-title {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Powerlifting</h1>
+
+    <div class="section" id="timeInGym">
+        <h2>Time since the first day at gym :</h2>
+        <p id="daysCount"></p>
+    </div>
+
+    <div class="section">
+        <h2>PRs & Progression</h2>
+        <div class="lift-title">
+            <span class="icon">💪</span>
+            <h3>Squat</h3>
+        </div>
+        <canvas id="squatChart" width="400" height="200"></canvas>
+
+        <div class="lift-title">
+            <span class="icon">🏅</span>
+            <h3>Bench Press</h3>
+        </div>
+        <canvas id="benchChart" width="400" height="200"></canvas>
+
+        <div class="lift-title">
+            <span class="icon">💪</span>
+            <h3>Deadlift</h3>
+        </div>
+        <canvas id="deadliftChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="section">
+        <h2>DOTs Score :</h2>
+        <p id="dotsScore"></p>
+    </div>
+
+    <div class="section">
+        <h2>Goals :</h2>
+        <ul>
+            <li>Squat : 180 kg</li>
+            <li>Bench : 140 kg</li>
+            <li>Deadlift : 220 kg</li>
+            <li>Poids : 90 kg</li>
+            <li>Bodyfat : 10-12%</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Youtube :</h2>
+        <ul class="video-list">
+            <li><a href="https://youtu.be/dmejud81-t0" target="_blank">When cat</a></li>
+            <li><a href="https://www.youtube.com/watch?v=TON_LIEN_ICI" target="_blank">Incoming SBD video</a></li>
+        </ul>
+    </div>
+
+    <script>
+        // Date de début
+        const startDate = new Date(2021, 9, 20); // octobre = 9 car mois commence à 0 en JS
+        const today = new Date();
+    
+        let years = today.getFullYear() - startDate.getFullYear();
+        let months = today.getMonth() - startDate.getMonth();
+        let days = today.getDate() - startDate.getDate();
+    
+        if (days < 0) {
+            months--;
+            days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+        }
+    
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+    
+        // Animation compteur
+        const targetDays = days;
+        const targetMonths = months;
+        const targetYears = years;
+    
+        let currentDays = 0;
+        let currentMonths = 0;
+        let currentYears = 0;
+    
+        function animateCounter() {
+            const daysElement = document.getElementById('daysCount');
+    
+            const interval = setInterval(() => {
+                if (currentYears < targetYears) {
+                    currentYears++;
+                } else if (currentMonths < targetMonths) {
+                    currentMonths++;
+                } else if (currentDays < targetDays) {
+                    currentDays++;
+                } else {
+                    clearInterval(interval);
+                }
+                daysElement.textContent = `${currentDays} days - ${currentMonths} months - ${currentYears} years.`;
+            }, 50); // vitesse de l'animation (plus bas = plus rapide)
+        }
+    
+        animateCounter();
+        
+        // Tes PRs dans le temps (exemples)
+        const squatData = [80, 100, 110, 140];
+        const benchData = [60, 80, 100, 120];
+        const deadliftData = [80, 120, 160, 190];
+        const labels = ['2022', '2023', '2024', '2025'];
+    
+        // Graphiques sans animation
+        function createChart(canvasId, data, label, color) {
+            new Chart(document.getElementById(canvasId), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        fill: true,
+                        backgroundColor: color + '33',
+                        borderColor: color,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    animation: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    
+        createChart('squatChart', squatData, 'Squat PR (kg)', '#ff6384');
+        createChart('benchChart', benchData, 'Bench PR (kg)', '#36a2eb');
+        createChart('deadliftChart', deadliftData, 'Deadlift PR (kg)', '#cc65fe');
+    
+        // DOTs Calculator
+        const bodyWeight = 85; // Ton poids actuel en kg
+        const totalLift = squatData[squatData.length-1] + benchData[benchData.length-1] + deadliftData[deadliftData.length-1];
+    
+        function calculateDOTS(bodyweight, total) {
+            const a = -0.000001093;
+            const b = 0.0007391293;
+            const c = -0.1918759221;
+            const d = 24.0900756;
+            const e = -307.75076;
+            const coeff = a * Math.pow(bodyweight, 4) + b * Math.pow(bodyweight, 3) + c * Math.pow(bodyweight, 2) + d * bodyweight + e;
+            return (total * 500) / coeff;
+        }
+    
+        const dots = calculateDOTS(bodyWeight, totalLift).toFixed(2);
+        document.getElementById('dotsScore').textContent = `${dots}`;
+    </script>
+</body>
+</html>

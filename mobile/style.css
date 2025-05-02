@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: auto;
+}
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    color: #0f0;
+    background: black;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    margin-top: 1rem;
+    text-shadow: 0 0 8px #0f0;
+}
+
+h1, h2 {
+    color: #0f0;
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+}
+
+main {
+    width: 100%;
+    padding: 1rem 0.5rem;
+    transform-style: preserve-3d;
+    transition: transform 0.1s;
+}
+
+#welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    padding: 0.3rem;
+}
+
+#welcome-message, #next-message {
+    opacity: 0;
+    font-size: 1.1rem;
+    animation-duration: 3s;
+    transition: opacity 0.3s ease-in-out;
+    margin-bottom: 0.3rem;
+}
+
+#welcome-message {
+    animation: fadeInOut 3s;
+}
+
+#next-message {
+    animation: fadeInOut 3s 3s;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    25% { opacity: 1; }
+    75% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+#content {
+    display: none;
+    width: 100%;
+    max-width: 900px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+section {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+p, ul {
+    font-size: 0.85rem;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li::before {
+    content: "• ";
+    color: #0f0;
+}
+
+#photo-section .photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: 2px dashed #0f0;
+    box-shadow: 0 0 10px #0f0;
+    max-width: 180px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#photo-section img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 10px #0f0;
+}
+
+h2, p, ul li {
+    transition: transform 0.2s, color 0.2s;
+}
+
+h2:hover, p:hover, ul li:hover {
+    transform: scale(1.05);
+    color: #ff0;
+}
+
+#social-media button,
+#projects button {
+    background: black;
+    color: #0f0;
+    border: 2px solid #0f0;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#social-media button:hover,
+#projects button:hover {
+    background: #0f0;
+    color: black;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    body {
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    #photo-section .photo-container {
+        max-width: 160px;
+    }
+
+    #content {
+        padding: 0.8rem;
+    }
+}

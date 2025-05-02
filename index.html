@@ -97,7 +97,7 @@ pre {
       // Variables d'état
       let currentDirectory = "Terminal"; 
       const files = ["cv.pdf", "cover.txt"];
-      const directories = ["projects", "contact"]; 
+      const directories = ["projects", "contact", "gym"]; 
       const commandsList = ["ls", "cd", "cat", "wget", "clear", "help"];
 
       // Introduction avant le shell
@@ -202,6 +202,10 @@ Navigate like a real terminal: 'ls', 'cd', 'cat', 'wget', 'clear'...
               window.location.href = `${githubBaseURL}/${args[0]}/index.html`;
             }, 1000);
             return "";
+          if (args[0] === "gym" && currentDirectory === "Terminal") {
+            window.location.href = `https://theunknowing.github.io/Gym/`;
+            return "Téléchargement de cover.txt...";
+            }
           }
           return "Répertoire non trouvé.";
         },

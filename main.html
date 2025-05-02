@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Bienvenue</title>
+  <style>
+body {
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  color: #00ff00;
+  font-family: monospace;
+}
+
+#terminal {
+  padding: 20px;
+  max-width: 800px;
+  margin: 50px auto;
+}
+
+button {
+  background-color: transparent;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  padding: 10px 20px;
+  margin: 10px 5px 0 0;
+  cursor: pointer;
+  font-family: monospace;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+button:hover {
+  background-color: #00ff00;
+  color: black;
+}
+    
+  </style>
+</head>
+<body>
+  <div id="terminal">
+    <div id="intro"></div>
+    <div id="question" style="display: none;">
+      <p>Que souhaitez-vous explorer ?</p>
+      <button onclick="redirect('page1.html')">Mes projets</button>
+      <button onclick="redirect('page2.html')">Mon CV</button>
+      <button onclick="redirect('page3.html')">Contact</button>
+    </div>
+  </div>
+
+  <script>
+    const text = "Bienvenue sur mon terminal personnel.\nChargement des options...";
+    const introDiv = document.getElementById("intro");
+
+    let index = 0;
+    function typeText() {
+      if (index < text.length) {
+        const char = text.charAt(index);
+        const span = document.createElement("span");
+        span.textContent = char;
+        span.style.opacity = 0;
+        introDiv.appendChild(span);
+        setTimeout(() => {
+          span.style.transition = "opacity 0.3s";
+          span.style.opacity = 1;
+        }, 20);
+        index++;
+        setTimeout(typeText, 50);
+      } else {
+        document.getElementById("question").style.display = "block";
+      }
+    }
+
+    function redirect(page) {
+      window.location.href = page;
+    }
+
+    typeText();
+  </script>
+</body>
+</html>

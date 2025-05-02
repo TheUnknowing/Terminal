@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .command {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .command span {
+            color: #00FF00;
+        }
+
+        .project-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .project-item {
+            flex: 1 1 30%;
+            margin-right: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .project-item img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #00FF00;
+            margin-top: 10px;
+        }
+
+        .project-item h2 {
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        /* Style de l'image miniature */
+        img.photo {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            cursor: pointer; /* Montre le curseur en forme de main pour indiquer que l'image est cliquable */
+        }
+        
+        /* Style du lightbox (pour afficher l'image agrandie) */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Fond sombre */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Placer au-dessus du contenu */
+        }
+        
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Affichage du lightbox */
+        .lightbox.show {
+            display: flex;
+        }
+
+        .description-box {
+            background-color: #1e1e1e; /* Fond sombre */
+            color: #33ff33; /* Texte vert */
+            font-family: monospace; /* Police monospace pour le style terminal */
+            padding: 1.5rem; /* Un peu d'espace autour du texte */
+            border-radius: 8px; /* Coins arrondis */
+            border: 2px solid #33ff33; /* Bordure verte */
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Ombre verte autour de la boîte */
+            max-width: 600px; /* Largeur maximale pour éviter d'avoir un texte trop large */
+            margin: 1rem auto; /* Centrer la boîte */
+            word-wrap: break-word; /* S'assurer que le texte long ne dépasse pas */
+        }
+        
+        .description-box p {
+            line-height: 1.6; /* Espacement entre les lignes pour améliorer la lisibilité */
+            white-space: pre-wrap; /* Préserve les retours à la ligne */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Projets & Réalisations</h1>
+
+        <div class="command">
+            <span>$ ls /projects</span>
+        </div>
+        
+        <div class="project-row">
+            <div class="project-item">
+                <h2>CESS</h2>
+                <a href="images/CESS.jpg" class="image-link">
+                    <img src="images/CESS.jpg" class="photo" alt="Mon CESS">
+                </a>
+                <div class="description-box">
+                    <p><strong>Date d'obtention :</strong> 2021-2022</p>
+                    <p>
+📄 Certificat : CESS – Technique de Transition Informatique<br>
+                    
+Ce diplôme atteste de mes compétences acquises en technique de transition informatique, validé par le Collège des Étoiles. Au cours de cette année, j'ai développé des compétences fondamentales dans plusieurs domaines clés de l'informatique et des technologies.<br><br>
+                    
+Compétences acquises :<br>
+- Maîtrise des concepts de programmation et de développement logiciel<br>
+- Utilisation des outils de gestion de projets informatiques<br>
+- Formation en systèmes d’exploitation (Linux, Windows)<br>
+- Initiation à la virtualisation et à la gestion des infrastructures<br>
+- Mise en place et gestion de réseaux informatiques et sécurité de base<br>
+- Réalisation de projets informatiques en équipe avec des méthodologies agiles<br>
+- Développement de jeux et d'applications avec Unity, incluant des projets pratiques et l’utilisation de moteurs de jeu pour des réalisations interactives.<br><br>
+                    
+🔧 Cette formation m'a permis de poser les bases solides pour continuer à évoluer dans le domaine de l'informatique, notamment en cybersécurité et en développement.
+                    </p>
+                </div>
+            </div>
+            <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+                <img id="lightbox-img" src="" alt="">
+            </div>
+        </div>
+
+        <div class="project-row">
+            <div class="project-item">
+                <h2>Pre Security - TryHackMe</h2>
+                <a href="images/THM-PreSecurity.jpg" class="image-link">
+                    <img src="images/THM-PreSecurity.jpg" class="photo" alt="Certificate of completion">
+                </a>
+                <div class="description-box">
+                    <p><strong>Date d'obtention :</strong> Avril 2025</p>
+                    <p>
+📄 Certificat : Pre Security – TryHackMe<br>
+                    
+Ce certificat valide les compétences fondamentales en cybersécurité acquises à travers le parcours "Pre Security" sur la plateforme TryHackMe.<br><br>
+                    
+Compétences acquises :<br>
+- Compréhension des bases du réseau (IP, DNS, HTTP, etc.)<br>
+- Utilisation de la ligne de commande (Linux, Bash)<br>
+- Gestion des systèmes de fichiers et des permissions<br>
+- Notions d’infrastructure informatique et de virtualisation<br>
+- Introduction aux concepts clés en cybersécurité (menaces, acteurs, bonnes pratiques)<br><br>
+                    
+🔐 Ce parcours pose les bases essentielles pour progresser vers l’analyse SOC, les CTFs et la Threat Hunting.
+                    </p>
+                </div>
+            </div>
+            <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+                <img id="lightbox-img" src="" alt="">
+            </div>
+        </div>
+        
+        <div class="project-row">
+            <div class="project-item">
+                <h2>Cyber Security 101 - TryHackMe</h2>
+                <a href="images/THM-CyberSecurity101.jpg" class="image-link">
+                    <img src="images/THM-CyberSecurity101.jpg" class="photo" alt="Certificate of completion">
+                </a>
+                <div class="description-box">
+                    <p><strong>Date d'obtention :</strong> Avril 2025</p>
+                    <p>
+📄 Certificat : Cyber Security 101 – TryHackMe<br>
+
+Ce certificat atteste de l’acquisition de compétences essentielles en cybersécurité à travers le parcours "Cyber Security 101" proposé par la plateforme TryHackMe.<br><br>
+
+Compétences acquises :<br>
+- Compréhension approfondie des fondamentaux de la cybersécurité<br>
+- Introduction aux cyberattaques et aux vecteurs de compromission<br>
+- Connaissance des modèles de sécurité (CIA Triad, Kill Chain, etc.)<br>
+- Familiarisation avec les rôles et outils utilisés en Blue Team & Red Team<br>
+- Développement d’une approche défensive face aux menaces informatiques<br><br>
+
+🔐 Ce parcours offre une base solide pour se spécialiser dans l’analyse SOC, la réponse à incident et l’exploration de techniques offensives et défensives.
+                    </p>
+                </div>
+            </div>
+            <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+                <img id="lightbox-img" src="" alt="">
+            </div>
+        </div>
+
+        <div class="project-row">
+            <div class="project-item">
+                <h2>Projet 4</h2>
+                <img src="images/projet4.jpg" class="photo" alt="Image du projet 4">
+                <div class="description-box">
+                    <p>Description du projet 4. Ce projet est dédié à...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span id="login-date"></span>
+        </div>
+    </div>
+
+    <script>
+    const dateElement = document.getElementById("login-date");
+    const currentDate = new Date();
+    const formattedDate = currentDate.toDateString();  // Formate la date selon la norme (ex: Fri Apr 11 2025)
+    dateElement.textContent = `last login: ${formattedDate}`;
+
+    // Fonction pour ouvrir le lightbox avec l'image agrandie
+    document.querySelectorAll('.image-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+            const largeImageSrc = this.href; // Récupère l'URL de l'image agrandie
+            document.getElementById('lightbox-img').src = largeImageSrc; // Met l'image dans le lightbox
+            document.getElementById('lightbox').classList.add('show'); // Affiche le lightbox
+        });
+    });
+    
+    // Fonction pour fermer le lightbox lorsqu'on clique dessus
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('show'); // Masque le lightbox
+        document.getElementById('lightbox-img').src = ''; // Réinitialise l'image
+    }
+    </script>
+</body>
+</html>

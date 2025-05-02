@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminal</title>
+  <style>
+    /* Style général pour le terminal */
+body {
+  background-color: black;
+  color: #00FF00; /* Texte vert */
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.terminal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  border: 2px solid #00FF00;
+  border-radius: 10px;
+  margin: 20px;
+  max-width: 90%;
+  box-shadow: 0 0 15px #00FF00;
+}
+
+pre {
+  margin: 0;
+}
+
+#output {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.intro-text {
+  font-style: italic;
+}
+
+.command {
+  color: #00FF00;
+}
+
+.prompt {
+  color: #00FF00;
+  font-weight: bold;
+}
+
+.output {
+  color: #00FF00;
+}
+
+#command {
+  background: transparent;
+  border: none;
+  color: #00FF00;
+  outline: none;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  width: 100%;
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.5em;
+  background-color: #00FF00;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <pre id="output"></pre>
+    <input type="text" id="command" autofocus>
+  </div>
+
+  <script>
+    if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      window.location.href = "./mobile/index.html";
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const output = document.getElementById("output");
+      const commandInput = document.getElementById("command");
+
+      // Nom du repo GitHub Pages
+      const githubBaseURL = "https://theunknowing.github.io/Terminal"; // Remplace par ton vrai URL GitHub Pages
+
+      // Variables d'état
+      let currentDirectory = "Terminal"; 
+      const files = ["cv.pdf", "cover.txt"];
+      const directories = ["projects", "contact"]; 
+      const commandsList = ["ls", "cd", "cat", "wget", "clear", "help"];
+
+      // Introduction avant le shell
+      const introText = 
+`[ xhd v1.0 booting... ]\n
+Initializing shell session... Please wait.\n
+
+ /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
+( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
+ > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
+ /\\_/\\                                   /\\_/\\
+( o.o )           .__          .___     ( o.o )
+ > ^ <    ___  ___|  |__    __| _/       > ^ < 
+ /\\_/\\    \\  \\/  /|  |  \\  / __ |        /\\_/\\
+( o.o )    >    < |   Y  \\/ /_/ |       ( o.o )
+ > ^ <    /__/\\_ \\|___|  /\\____ |        > ^ < 
+ /\\_/\\          \\/     \\/      \\/        /\\_/\\
+( o.o )                                 ( o.o )
+ > ^ <                                   > ^ < 
+ /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
+( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
+ > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n
+Welcome to xhd’s virtual terminal.
+
+Type 'help' to display available commands.
+Navigate like a real terminal: 'ls', 'cd', 'cat', 'wget', 'clear'...
+`;
+      let index = 0;
+
+      function typeWriter() {
+        if (index < introText.length) {
+          output.innerHTML += introText.charAt(index);
+          index++;
+          setTimeout(typeWriter, 10);
+        } else {
+          output.innerHTML += "<br>";
+          introDone = true;
+          commandInput.disabled = false;
+          commandInput.focus();
+        }
+      }
+
+      typeWriter();
+
+      commandInput.disabled = true;
+
+      let prompt = "Terminal@guest:~# "; 
+
+      let introDone = false;
+
+      // Liste des commandes
+      const commands = {
+        ls: () => {
+          if (currentDirectory === "Terminal") {
+            return `${directories.join("  ")}  ${files.join("  ")}`;
+          }
+          return "Aucun fichier ici.";
+        },
+        cat: (args) => {
+          if (!args[0]) return "Veuillez spécifier un fichier.";
+          if (args[0] === "cover.txt" && currentDirectory === "Terminal") {
+            fetch(`${githubBaseURL}/cover.txt`)
+              .then(response => response.text())
+              .then(text => {
+                output.innerHTML += `<pre class="output">${text}</pre><br>`;
+              })
+              .catch(() => {
+                output.innerHTML += `<span class="output">Erreur : Impossible d'afficher cover.txt</span><br>`;
+              });
+            return "Affichage du contenu de cover.txt...";
+          }
+          if (args[0] === "cv.pdf" && currentDirectory === "Terminal") {
+            fetch(`${githubBaseURL}/cv.pdf`)
+              .then(response => response.text())
+              .then(text => {
+                output.innerHTML += `<pre class="output">${text}</pre><br>`;
+              })
+              .catch(() => {
+                output.innerHTML += `<span class="output">Erreur : Impossible d'afficher cv.pdf</span><br>`;
+              });
+            return "Affichage du contenu de cv.pdf...";
+          }
+          return "Fichier non trouvé.";
+        },
+        wget: (args) => {
+          if (!args[0]) return "Veuillez spécifier un fichier.";
+          if (args[0] === "cv.pdf" && currentDirectory === "Terminal") {
+            window.location.href = `${githubBaseURL}/cv.pdf`;
+            return "Téléchargement de cv.pdf...";
+          }
+          if (args[0] === "cover.txt" && currentDirectory === "Terminal") {
+            window.location.href = `${githubBaseURL}/cover.txt`;
+            return "Téléchargement de cover.txt...";
+          }
+          return "Fichier non trouvé.";
+        },
+        cd: (args) => {
+          if (!args[0]) return "Veuillez spécifier un répertoire.";
+          if (directories.includes(args[0])) {
+            output.innerHTML += `<span class="output">Accès à '${args[0]}'...</span><br>`;
+            setTimeout(() => {
+              window.location.href = `${githubBaseURL}/${args[0]}/index.html`;
+            }, 1000);
+            return "";
+          }
+          return "Répertoire non trouvé.";
+        },
+        clear: () => {
+          output.innerHTML = "";
+          return "";
+        },
+        help: () => {
+          return `
+            <strong>Liste des commandes disponibles :</strong><br>
+            <span class="output">ls</span> - Affiche les fichiers et répertoires du répertoire courant.<br>
+            <span class="output">cd <i>répertoire</i></span> - Change de répertoire. Par exemple, 'cd projects'.<br>
+            <span class="output">cat <i>fichier</i></span> - Affiche le contenu d'un fichier texte. Exemple : 'cat cover.txt'.<br>
+            <span class="output">wget <i>fichier</i></span> - Ouvre un fichier. Exemple : 'wget cv.pdf'.<br>
+            <span class="output">clear</span> - Efface l'écran du terminal.<br>
+            <span class="output">help</span> - Affiche cette aide avec la liste des commandes.<br>
+          `;
+        }
+      };
+
+      // Gestion des commandes
+      commandInput.addEventListener("keydown", (e) => {
+        if (!introDone) return; // Bloque tant que l'intro n'est pas terminée
+        if (e.key === "Enter") {
+          const command = commandInput.value.trim();
+          commandInput.value = "";
+          output.innerHTML += `<span class="prompt">${prompt}</span><span class="command">${command}</span><br>`;
+          executeCommand(command);
+        }
+        if (e.key === "Tab") {
+          e.preventDefault();
+          autocomplete(commandInput);
+        }
+      });
+
+      function executeCommand(command) {
+        const args = command.split(" ");
+        const cmd = args[0];
+
+        if (commands[cmd]) {
+          const result = commands[cmd](args.slice(1));
+          if (result) output.innerHTML += `<span class="output">${result}</span><br><br>`;
+        } else {
+          output.innerHTML += `<span class="output">Commande inconnue: ${cmd}</span><br><br>`;
+        }
+
+        output.scrollTop = output.scrollHeight; 
+      }
+
+      function autocomplete(input) {
+        const value = input.value.trim();
+        if (!value) return;
+      
+        const parts = value.split(" ");
+        const cmd = parts[0];
+        const arg = parts[1] || "";
+      
+        // Si on n'a tapé qu'une commande
+        if (parts.length === 1) {
+          const suggestions = commandsList.filter(c => c.startsWith(cmd));
+          if (suggestions.length === 1) {
+            input.value = suggestions[0] + " ";
+          } else if (suggestions.length > 1) {
+            output.innerHTML += `<span class="output">${suggestions.join("  ")}</span><br><br>`;
+          }
+        }
+      
+        // Si la commande est connue et on complète un argument
+        else if (commandsList.includes(cmd)) {
+          const suggestions = [...directories, ...files].filter(item => item.startsWith(arg));
+          if (suggestions.length === 1) {
+            input.value = cmd + " " + suggestions[0] + " ";
+          } else if (suggestions.length > 1) {
+            output.innerHTML += `<span class="output">${suggestions.join("  ")}</span><br><br>`;
+          }
+        }
+      
+        output.scrollTop = output.scrollHeight;
+      }
+    });
+  </script>
+</body>
+</html>

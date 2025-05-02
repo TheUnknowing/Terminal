@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Bienvenue</title>
+  <title>Terminal d'accueil</title>
   <style>
 body {
   margin: 0;
@@ -33,13 +33,33 @@ button:hover {
   background-color: #00ff00;
   color: black;
 }
-    
+
+.fade-text {
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1s forwards;
+}
+
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
   </style>
 </head>
 <body>
   <div id="terminal">
-    <div id="intro"></div>
-    <div id="question" style="display: none;">
+    <div id="intro" class="fade-text"></div>
+    <div id="question-block" style="display: none;">
       <p>Que souhaitez-vous explorer ?</p>
       <button onclick="redirect('page1.html')">Mes projets</button>
       <button onclick="redirect('page2.html')">Mon CV</button>
@@ -48,33 +68,31 @@ button:hover {
   </div>
 
   <script>
-    const text = "Bienvenue sur mon terminal personnel.\nChargement des options...";
+    const introText = "Bienvenue sur mon terminal personnel.";
     const introDiv = document.getElementById("intro");
+    const questionBlock = document.getElementById("question-block");
 
-    let index = 0;
-    function typeText() {
-      if (index < text.length) {
-        const char = text.charAt(index);
-        const span = document.createElement("span");
-        span.textContent = char;
-        span.style.opacity = 0;
-        introDiv.appendChild(span);
+    function showIntro() {
+      introDiv.textContent = introText;
+      introDiv.classList.add("fade-in");
+
+      setTimeout(() => {
+        introDiv.classList.remove("fade-in");
+        introDiv.classList.add("fade-out");
+
         setTimeout(() => {
-          span.style.transition = "opacity 0.3s";
-          span.style.opacity = 1;
-        }, 20);
-        index++;
-        setTimeout(typeText, 50);
-      } else {
-        document.getElementById("question").style.display = "block";
-      }
+          introDiv.style.display = "none";
+          questionBlock.style.display = "block";
+          questionBlock.classList.add("fade-in");
+        }, 1000); // temps pour le fondu de sortie
+      }, 2500); // durée d’affichage du texte avant disparition
     }
 
     function redirect(page) {
       window.location.href = page;
     }
 
-    typeText();
+    window.onload = showIntro;
   </script>
 </body>
 </html>

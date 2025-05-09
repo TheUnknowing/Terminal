@@ -21,6 +21,7 @@
     header h1 {
       margin: 0;
       font-size: 2rem;
+      animation: typing 3s steps(30) 1s 1 normal both, blink 0.75s step-end infinite;
     }
     main {
       padding: 2rem;
@@ -69,6 +70,19 @@
       }
       100% {
         opacity: 1;
+      }
+    }
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
+      }
+    }
+    @keyframes blink {
+      50% {
+        border-color: transparent;
       }
     }
     footer {

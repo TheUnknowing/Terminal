@@ -85,6 +85,14 @@ section {
     margin-bottom: 1rem;
 }
 
+.footer {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    font-size: 12px;
+    pointer-events: none;
+}
+
 p, ul {
     font-size: 0.85rem;
     line-height: 1.2;

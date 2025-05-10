@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Animations Showcase</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #eee;
+      padding: 20px;
+    }
+    h2 {
+      margin: 30px 0 10px;
+      color: #00ffcc;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+
+    /* ---------- LOADING ANIMATIONS ---------- */
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #333;
+      border-top: 5px solid #00ffcc;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .skeleton {
+      width: 200px;
+      height: 20px;
+      background: linear-gradient(90deg, #444, #666, #444);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 10px;
+      background-color: #00ffcc;
+      animation: progress 3s linear forwards;
+      margin: 20px auto;
+    }
+
+    @keyframes progress {
+      to { width: 100%; }
+    }
+
+    .text-reveal {
+      overflow: hidden;
+      border-right: .15em solid orange;
+      white-space: nowrap;
+      animation: typing 3s steps(30, end), blink .75s step-end infinite;
+      width: 20ch;
+      margin: 20px auto;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 20ch; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .wave {
+      position: relative;
+      height: 20px;
+      background: linear-gradient(135deg, #00ffcc 25%, transparent 25%) -10px 0,
+                  linear-gradient(225deg, #00ffcc 25%, transparent 25%) -10px 0;
+      background-size: 20px 20px;
+      animation: wave-move 1s linear infinite;
+    }
+
+    @keyframes wave-move {
+      0% { background-position-x: 0; }
+      100% { background-position-x: 20px; }
+    }
+
+    .logo-fade {
+      font-size: 2em;
+      text-align: center;
+      opacity: 0;
+      animation: fade-in 3s forwards;
+    }
+
+    @keyframes fade-in {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 CSS Animations Showcase</h1>
+
+  <section>
+    <h2>🔄 Spinner (Loading)</h2>
+    <div class="spinner"></div>
+  </section>
+
+  <section>
+    <h2>🦴 Skeleton Loader</h2>
+    <div class="skeleton"></div>
+  </section>
+
+  <section>
+    <h2>📊 Progress Bar</h2>
+    <div class="progress-bar"></div>
+  </section>
+
+  <section>
+    <h2>⌨️ Text Reveal (Typing Effect)</h2>
+    <div class="text-reveal">Chargement de la page...</div>
+  </section>
+
+  <section>
+    <h2>🌊 Wave Animation</h2>
+    <div class="wave"></div>
+  </section>
+
+  <section>
+    <h2>✨ Logo Fade In</h2>
+    <div class="logo-fade">Mon Site</div>
+  </section>
+</body>
+</html>

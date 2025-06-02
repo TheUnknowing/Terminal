@@ -18,7 +18,7 @@ body {
 .terminal {
   width: 1500px;
   max-width: 90%;
-  height: 750px; /* Hauteur fixe */
+  height: 650px; /* Hauteur fixe */
   margin: 40px auto;
   padding: 20px;
   display: flex;
@@ -210,12 +210,11 @@ pre {
         help: () => {
           return `
 <strong>Liste des commandes disponibles :</strong><br>
-<span class="output">ls</span> - Affiche les fichiers et répertoires du répertoire courant.<br>
-<span class="output">cd <i>répertoire</i></span> - Change de répertoire. Par exemple, 'cd projects'.<br>
-<span class="output">open <i>fichier</i></span> - Ouvre un fichier. Exemple : 'wget cv.pdf'.<br>
-<span class="output">clear</span> - Efface l'écran du terminal.<br>
-<span class="output">help</span> - Affiche cette aide avec la liste des commandes.<br>
-          `;
+<span class="output">ls</span> - Displays files and directories in the current directory.<br>
+<span class="output">cd <i>directory</i></span> - Change directory. Example : 'cd projects'.<br>
+<span class="output">open <i>file</i></span> - Opens a file. Example: 'wget cv.pdf'.<br>
+<span class="output">clear</span> - Clears the terminal screen.<br>
+<span class="output">help</span> - Displays the list of commands.<br>`;
         }
       };
 

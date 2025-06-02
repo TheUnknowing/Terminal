@@ -102,28 +102,28 @@ pre {
 
       // Introduction avant le shell
       const introParts = [
-        { content: `[ xhd v1.1 booting... ]\n\n`, speed: 25 },
-        { content: `Initializing shell session... Please wait.\n\n`, speed: 25 },
+        { content: `[ xhd v1.1 booting... ]\n`, speed: 20 },
+        { content: `Initializing shell session... Please wait.\n`, speed: 20 },
         { content: `
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
  > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
  /\\_/\\                                   /\\_/\\
-( o.o )           .__         .____     ( o.o )
- > ^ <    ___  ___|  |__    __| _/       > ^ < 
- /\\_/\\    \\  \\/  /|  |  \\  / __ |        /\\_/\\
-( o.o )    >    < |   Y  \\/ /_/ |       ( o.o )
- > ^ <    /__/\\_ \\|___|  /\\____ |        > ^ < 
- /\\_/\\          \\/     \\/      \\/        /\\_/\\
+( o.o )            .__         .____    ( o.o )
+ > ^ <     ___  ___|  |__    __| _/      > ^ < 
+ /\\_/\\     \\  \\/  /|  |  \\  / __ |       /\\_/\\
+( o.o )     >    < |   Y  \\/ /_/ |      ( o.o )
+ > ^ <     /__/\\_ \\|___|  /\\____ |       > ^ < 
+ /\\_/\\           \\/     \\/      \\/       /\\_/\\
 ( o.o )                                 ( o.o )
  > ^ <                                   > ^ < 
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
  > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n`,
-          speed: 5  // plus rapide ici
+          speed: 1  // plus rapide ici
         },
-        { content: `Welcome to xhd’s virtual terminal.\n\n`, speed: 25 },
-        { content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...\n`, speed: 25 }
+        { content: `Welcome to xhd’s virtual terminal.\n`, speed: 20 },
+        { content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...`, speed: 20 }
       ];
       
       let currentPart = 0;

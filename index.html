@@ -72,19 +72,6 @@ pre {
   animation: blink 0.8s infinite;
 }
 
-.logo {
-  display: block;           /* s’assure que c’est un bloc */
-  white-space: pre;         /* conserve l’espacement ASCII */
-  height: 300px;            /* fixe la hauteur approximative du logo */
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  overflow: hidden;         /* empêche tout débordement */
-}
-
-.logo.visible {
-  opacity: 1;
-}
-
 @keyframes blink {
       50% { opacity: 0; }
     }
@@ -145,17 +132,9 @@ pre {
         const part = introParts[currentPart];
       
         if (part.type === "logo") {
-          const logoElement = document.createElement("pre");
-          logoElement.className = "logo";
-          logoElement.textContent = part.content;
-          output.appendChild(logoElement);
-          
-          requestAnimationFrame(() => {
-            logoElement.classList.add("visible");
-            currentPart++;
-            index = 0;
-            setTimeout(typeWriterPart, 500);
-          });
+          output.innerHTML += part.content.charAt(index);
+          index++;
+          setTimeout(typeWriterPart, 20);
       
           return;
         }

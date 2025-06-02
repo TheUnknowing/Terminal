@@ -62,7 +62,7 @@ pre {
   font-style: italic;
 }
 
-.shellprompt {
+.prompt {
   color: #00FF00;
   font-family: 'Courier New', monospace;
   font-weight: bold;
@@ -104,8 +104,8 @@ pre {
   <div class="terminal">
     <pre id="output"></pre>
     <div id="input-line" style="display: none; width: 100%; display: flex;">
-      <span class="shellprompt">Terminal@guest:~# </span>
-      <input type="text" id="command" autofocus autocomplete="off" />
+      <span class="prompt">Terminal@guest:~# </span>
+      <input type="text" id="command" autofocus>
     </div>
   </div>
 
@@ -170,12 +170,8 @@ pre {
             setTimeout(typeWriterPart, 500);
           } else {
             introDone = true;
-            document.getElementById("input-line").style.display = "flex"; // ✅ montre le prompt + input
             commandInput.disabled = false;
             commandInput.focus();
-            setTimeout(() => {
-              output.scrollTop = output.scrollHeight;
-            }, 50);
           }
         }
       }
@@ -231,7 +227,7 @@ pre {
         if (e.key === "Enter") {
           const command = commandInput.value.trim();
           commandInput.value = "";
-          output.innerHTML += `<span class="shellprompt">${shellprompt}</span><span class="command">${command}</span><br>`;
+          output.innerHTML += `<span class="prompt">${prompt}</span><span class="command">${command}</span><br>`;
           executeCommand(command);
         }
         if (e.key === "Tab") {

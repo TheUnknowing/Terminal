@@ -102,9 +102,9 @@ pre {
 
       // Introduction avant le shell
       const introParts = [
-        { type: "text", content: `[ xhd v1.1 booting... ]\n` },
-        { type: "text", content: `Initializing shell session... Please wait.\n` },
-        { type: "logo", content: `
+        { content: `[ xhd v1.1 booting... ]\n\n`, speed: 25 },
+        { content: `Initializing shell session... Please wait.\n\n`, speed: 25 },
+        { content: `
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
  > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
@@ -119,9 +119,11 @@ pre {
  > ^ <                                   > ^ < 
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
- > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n` },
-        { type: "text", content: `Welcome to xhd’s virtual terminal.\n` },
-        { type: "text", content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...` }
+ > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n`,
+          speed: 5  // plus rapide ici
+        },
+        { content: `Welcome to xhd’s virtual terminal.\n\n`, speed: 25 },
+        { content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...\n`, speed: 25 }
       ];
       
       let currentPart = 0;
@@ -130,19 +132,10 @@ pre {
       
       function typeWriterPart() {
         const part = introParts[currentPart];
-      
-        if (part.type === "logo") {
-          output.innerHTML += part.content.charAt(index);
-          index++;
-          setTimeout(typeWriterPart, 20);
-      
-          return;
-        }
-      
         if (index < part.content.length) {
           output.innerHTML += part.content.charAt(index);
           index++;
-          setTimeout(typeWriterPart, 20);
+          setTimeout(typeWriterPart, part.speed);
         } else {
           output.innerHTML += "\n\n";
           currentPart++;
@@ -159,6 +152,7 @@ pre {
       
       commandInput.disabled = true;
       typeWriterPart();
+
 
       let prompt = "Terminal@guest:~# "; 
 

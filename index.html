@@ -102,45 +102,45 @@ pre {
 
       // Introduction avant le shell
       const introParts = [
-        `[ xhd v1.1 booting... ]\n\n`,
-        `Initializing shell session... Please wait.\n\n`,
-        // Partie logo ASCII (affichée instantanément)
-        `LOGO`, 
-        `Welcome to xhd’s virtual terminal.\n\n`,
-        `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...\n`
+        { type: "text", content: `[ xhd v1.1 booting... ]\n\n` },
+        { type: "text", content: `Initializing shell session... Please wait.\n\n` },
+        { type: "logo", content: `
+       /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
+      ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
+       > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
+       /\\_/\\                                   /\\_/\\
+      ( o.o )           .__         .____     ( o.o )
+       > ^ <    ___  ___|  |__    __| _/       > ^ < 
+       /\\_/\\    \\  \\/  /|  |  \\  / __ |        /\\_/\\
+      ( o.o )    >    < |   Y  \\/ /_/ |       ( o.o )
+       > ^ <    /__/\\_ \\|___|  /\\____ |        > ^ < 
+       /\\_/\\          \\/     \\/      \\/        /\\_/\\
+      ( o.o )                                 ( o.o )
+       > ^ <                                   > ^ < 
+       /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
+      ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
+       > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n` },
+        { type: "text", content: `Welcome to xhd’s virtual terminal.\n\n` },
+        { type: "text", content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...\n` }
       ];
-      const logoBlock = 
-` /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
-( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
- > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
- /\\_/\\                                   /\\_/\\
-( o.o )           .__         .____     ( o.o )
- > ^ <    ___  ___|  |__    __| _/       > ^ < 
- /\\_/\\    \\  \\/  /|  |  \\  / __ |        /\\_/\\
-( o.o )    >    < |   Y  \\/ /_/ |       ( o.o )
- > ^ <    /__/\\_ \\|___|  /\\____ |        > ^ < 
- /\\_/\\          \\/     \\/      \\/        /\\_/\\
-( o.o )                                 ( o.o )
- > ^ <                                   > ^ < 
- /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
-( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
- > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n`;
+      
       let currentPart = 0;
       let index = 0;
       let introDone = false;
       
       function typeWriterPart() {
-        const currentText = introParts[currentPart];
+        const part = introParts[currentPart];
       
-        if (currentText === "LOGO") {
-          output.innerHTML += logoBlock + "\n\n"; // Affiche instantanément
+        if (part.type === "logo") {
+          output.innerHTML += part.content;
           currentPart++;
-          setTimeout(typeWriterPart, 500); // Petite pause avant de continuer
+          index = 0;
+          setTimeout(typeWriterPart, 500); // Pause après le logo
           return;
         }
       
-        if (index < currentText.length) {
-          output.innerHTML += currentText.charAt(index);
+        if (index < part.content.length) {
+          output.innerHTML += part.content.charAt(index);
           index++;
           setTimeout(typeWriterPart, 25);
         } else {
@@ -156,7 +156,7 @@ pre {
           }
         }
       }
-
+      
       commandInput.disabled = true;
       typeWriterPart();
 

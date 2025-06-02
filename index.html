@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terminal</title>
+  <title>Terminal - xhd</title>
   <style>
     /* Style général pour le terminal */
 body {
@@ -16,9 +16,9 @@ body {
 }
 
 .terminal {
-  width: 1000px;
+  width: 1500px;
   max-width: 90%;
-  height: 500px; /* Hauteur fixe */
+  height: 750px; /* Hauteur fixe */
   margin: 40px auto;
   padding: 20px;
   display: flex;
@@ -33,12 +33,11 @@ body {
 }
 
 #output {
-  flex: 1; /* Prend tout l'espace restant */
-  overflow-y: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
   max-width: 100%;
-  margin-bottom: 10px;
+  overflow-y: auto;
+  max-height: 400px; /* ou ce que tu veux */
 }
 
 #command {
@@ -49,6 +48,10 @@ body {
   font-family: 'Courier New', monospace;
   font-size: 18px;
   width: 100%;
+  flex-grow: 1;
+  padding: 0;
+  margin: 0;
+  line-height: 1.5em;
 }
 
 pre {
@@ -94,7 +97,10 @@ pre {
 <body>
   <div class="terminal">
     <pre id="output"></pre>
-    <input type="text" id="command" autofocus>
+    <div style="display: flex; width: 100%;">
+      <span class="prompt">Terminal@guest:~# </span>
+      <input type="text" id="command" autofocus>
+    </div>
   </div>
 
   <script>
@@ -239,7 +245,9 @@ pre {
           output.innerHTML += `<span class="output">Commande inconnue: ${cmd}</span><br><br>`;
         }
 
-        output.scrollTop = output.scrollHeight; 
+        setTimeout(() => {
+          output.scrollTop = output.scrollHeight;
+        }, 50);
       }
 
       function autocomplete(input) {
@@ -270,7 +278,9 @@ pre {
           }
         }
       
-        output.scrollTop = output.scrollHeight;
+        setTimeout(() => {
+          output.scrollTop = output.scrollHeight;
+        }, 50);
       }
     });
   </script>

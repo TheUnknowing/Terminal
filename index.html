@@ -16,15 +16,19 @@ body {
 }
 
 .terminal {
+  width: 800px; /* taille fixe et prédéfinie */
+  max-width: 90%; /* pour s'adapter sur petits écrans */
+  margin: 40px auto; /* centrage horizontal automatique */
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 20px;
   border: 2px solid #00FF00;
   border-radius: 10px;
-  margin: 20px;
-  max-width: 90%;
   box-shadow: 0 0 15px #00FF00;
+  background-color: #000; /* pour un vrai look terminal */
+  color: #00FF00; /* texte vert */
+  font-family: 'Courier New', Courier, monospace;
 }
 
 pre {

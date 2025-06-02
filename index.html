@@ -72,6 +72,28 @@ pre {
   animation: blink 0.8s infinite;
 }
 
+@keyframes glitch {
+  0% { transform: skew(0deg); }
+  15% { transform: skew(3deg); }
+  30% { transform: skew(-3deg); }
+  45% { transform: skew(2deg); }
+  60% { transform: skew(-2deg); }
+  75% { transform: skew(1deg); }
+  100% { transform: skew(0deg); }
+}
+
+.logo {
+  opacity: 0;
+  font-family: monospace;
+  white-space: pre;
+  transition: opacity 0.2s ease-in;
+}
+
+.logo.visible {
+  opacity: 1;
+  animation: glitch 0.25s linear 2;
+}
+
 @keyframes blink {
       50% { opacity: 0; }
     }
@@ -102,25 +124,25 @@ pre {
 
       // Introduction avant le shell
       const introParts = [
-        { type: "text", content: `[ xhd v1.1 booting... ]\n` },
-        { type: "text", content: `Initializing shell session... Please wait.\n` },
+        { type: "text", content: `[ xhd v1.1 booting... ]\n\n` },
+        { type: "text", content: `Initializing shell session... Please wait.\n\n` },
         { type: "logo", content: `
- /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
-( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
- > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
- /\\_/\\                                   /\\_/\\
-( o.o )           .__         .____     ( o.o )
- > ^ <    ___  ___|  |__    __| _/       > ^ < 
- /\\_/\\    \\  \\/  /|  |  \\  / __ |        /\\_/\\
-( o.o )    >    < |   Y  \\/ /_/ |       ( o.o )
- > ^ <    /__/\\_ \\|___|  /\\____ |        > ^ < 
- /\\_/\\          \\/     \\/      \\/        /\\_/\\
-( o.o )                                 ( o.o )
- > ^ <                                   > ^ < 
- /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
-( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
- > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n` },
-        { type: "text", content: `Welcome to xhd’s virtual terminal.\n` },
+       /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
+      ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
+       > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
+       /\\_/\\                                   /\\_/\\
+      ( o.o )           .__         .____     ( o.o )
+       > ^ <    ___  ___|  |__    __| _/       > ^ < 
+       /\\_/\\    \\  \\/  /|  |  \\  / __ |        /\\_/\\
+      ( o.o )    >    < |   Y  \\/ /_/ |       ( o.o )
+       > ^ <    /__/\\_ \\|___|  /\\____ |        > ^ < 
+       /\\_/\\          \\/     \\/      \\/        /\\_/\\
+      ( o.o )                                 ( o.o )
+       > ^ <                                   > ^ < 
+       /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
+      ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
+       > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n` },
+        { type: "text", content: `Welcome to xhd’s virtual terminal.\n\n` },
         { type: "text", content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...\n` }
       ];
       
@@ -132,10 +154,19 @@ pre {
         const part = introParts[currentPart];
       
         if (part.type === "logo") {
-          output.innerHTML += part.content;
-          currentPart++;
-          index = 0;
-          setTimeout(typeWriterPart, 500); // Pause après le logo
+          const logoElement = document.createElement("pre");
+          logoElement.className = "logo";
+          logoElement.textContent = part.content;
+          output.appendChild(logoElement);
+      
+          // Déclenche l'effet glitch après une courte pause
+          setTimeout(() => {
+            logoElement.classList.add("visible");
+            currentPart++;
+            index = 0;
+            setTimeout(typeWriterPart, 500); // Continue après animation
+          }, 10);
+      
           return;
         }
       

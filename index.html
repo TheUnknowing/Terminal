@@ -37,7 +37,7 @@ body {
   word-wrap: break-word;
   max-width: 100%;
   overflow-y: auto;
-  max-height: 1000px; /* ou ce que tu veux */
+  max-height: 1000px;
 }
 
 #command {
@@ -64,7 +64,9 @@ pre {
 
 .prompt {
   color: #00FF00;
+  font-family: 'Courier New', monospace;
   font-weight: bold;
+  font-size: 18px;
 }
 
 .output {
@@ -79,6 +81,10 @@ pre {
   font-family: 'Courier New', monospace;
   font-size: 18px;
   width: 100%;
+  flex-grow: 1;
+  padding: 0;
+  margin: 0;
+  line-height: 1.5em;
 }
 
 .cursor {
@@ -97,9 +103,9 @@ pre {
 <body>
   <div class="terminal">
     <pre id="output"></pre>
-    <div style="display: flex; width: 100%;">
+    <div id="input-line" style="display: none; width: 100%; display: flex;">
       <span class="prompt">Terminal@guest:~# </span>
-      <input type="text" id="command" autofocus>
+      <input type="text" id="command" autofocus autocomplete="off" />
     </div>
   </div>
 
@@ -164,17 +170,16 @@ pre {
             setTimeout(typeWriterPart, 500);
           } else {
             introDone = true;
+            document.getElementById("input-line").style.display = "flex"; // ✅ montre le prompt + input
             commandInput.disabled = false;
             commandInput.focus();
+            scrollToBottom(); // ✅ scroll après intro
           }
         }
       }
       
       commandInput.disabled = true;
       typeWriterPart();
-
-
-      let prompt = "Terminal@guest:~# "; 
 
       // Liste des commandes
       const commands = {
@@ -248,7 +253,7 @@ pre {
           output.scrollTop = output.scrollHeight;
         }, 50);
       }
-
+      
       function autocomplete(input) {
         const value = input.value.trim();
         if (!value) return;

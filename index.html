@@ -173,7 +173,9 @@ pre {
             document.getElementById("input-line").style.display = "flex"; // ✅ montre le prompt + input
             commandInput.disabled = false;
             commandInput.focus();
-            scrollToBottom(); // ✅ scroll après intro
+            setTimeout(() => {
+              output.scrollTop = output.scrollHeight;
+            }, 50);
           }
         }
       }

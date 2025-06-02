@@ -36,8 +36,16 @@ body {
   white-space: pre-wrap;
   word-wrap: break-word;
   max-width: 100%;
-  overflow-y: auto;
   max-height: 1000px;
+  overflow-y: auto;
+
+  /* Cacher la scrollbar mais permettre le scroll */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+#output::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 pre {
@@ -66,11 +74,21 @@ pre {
   outline: none;
   font-family: 'Courier New', monospace;
   font-size: 18px;
-  width: 100%;
   flex-grow: 1;
   padding: 0;
-  margin-left: 10px;
-  line-height: 1.5em;
+  margin: 0;
+  line-height: 1.5em; /* même line-height que prompt */
+}
+
+#input-line {
+  display: flex;
+  align-items: center; /* Aligne verticalement prompt et input */
+  gap: 8px; /* Espacement horizontal entre prompt et input */
+  width: 100%;
+}
+
+#input-line .prompt {
+  line-height: 1.5em; /* Pour matcher la hauteur de l'input */
 }
 
 .cursor {

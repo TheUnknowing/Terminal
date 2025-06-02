@@ -73,13 +73,11 @@ pre {
 }
 
 .logo {
-  display: inline-block;
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.5s ease-out;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 .logo.visible {
-  transform: scaleY(1);
+  opacity: 1;
 }
 
 @keyframes blink {
@@ -113,7 +111,7 @@ pre {
       // Introduction avant le shell
       const introParts = [
         { type: "text", content: `[ xhd v1.1 booting... ]\n` },
-        { type: "text", content: `Initializing shell session... Please wait.\n\n` },
+        { type: "text", content: `Initializing shell session... Please wait.\n` },
         { type: "logo", content: `
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
@@ -129,7 +127,7 @@ pre {
  > ^ <                                   > ^ < 
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
- > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n\n` },
+ > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n` },
         { type: "text", content: `Welcome to xhd’s virtual terminal.\n` },
         { type: "text", content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...` }
       ];
@@ -147,11 +145,12 @@ pre {
           logoElement.textContent = part.content;
           output.appendChild(logoElement);
           
+          // Force un reflow pour que la classe visible soit bien prise en compte après appending
           setTimeout(() => {
             logoElement.classList.add("visible");
             currentPart++;
             index = 0;
-            setTimeout(typeWriterPart, 500); // Continue l’intro après le logo
+            setTimeout(typeWriterPart, 500); // Continue après
           }, 10);
       
           return;

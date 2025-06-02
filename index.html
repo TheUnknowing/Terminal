@@ -73,9 +73,14 @@ pre {
 }
 
 .logo {
+  display: block;           /* s’assure que c’est un bloc */
+  white-space: pre;         /* conserve l’espacement ASCII */
+  height: 300px;            /* fixe la hauteur approximative du logo */
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
+  overflow: hidden;         /* empêche tout débordement */
 }
+
 .logo.visible {
   opacity: 1;
 }
@@ -145,13 +150,12 @@ pre {
           logoElement.textContent = part.content;
           output.appendChild(logoElement);
           
-          // Force un reflow pour que la classe visible soit bien prise en compte après appending
-          setTimeout(() => {
+          requestAnimationFrame(() => {
             logoElement.classList.add("visible");
             currentPart++;
             index = 0;
-            setTimeout(typeWriterPart, 500); // Continue après
-          }, 10);
+            setTimeout(typeWriterPart, 500);
+          });
       
           return;
         }

@@ -102,10 +102,15 @@ pre {
 
       // Introduction avant le shell
       const introParts = [
-`[ xhd v1.1 booting... ]\n',
-Initializing shell session... Please wait.\n',
-
- /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
+        `[ xhd v1.1 booting... ]\n\n`,
+        `Initializing shell session... Please wait.\n\n`,
+        // Partie logo ASCII (affichée instantanément)
+        `LOGO`, 
+        `Welcome to xhd’s virtual terminal.\n\n`,
+        `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...\n`
+      ];
+      const logoBlock = 
+' /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
  > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < 
  /\\_/\\                                   /\\_/\\
@@ -119,19 +124,23 @@ Initializing shell session... Please wait.\n',
  > ^ <                                   > ^ < 
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
- > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n',
-Welcome to xhd’s virtual terminal.
-
-Type 'help' to display available commands.
-Navigate like a real terminal: 'ls', 'cd', 'open', 'clear'...
-`];
+ > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n\n';
       let currentPart = 0;
       let index = 0;
       let introDone = false;
       
       function typeWriterPart() {
-        if (index < introParts[currentPart].length) {
-          output.innerHTML += introParts[currentPart].charAt(index);
+        const currentText = introParts[currentPart];
+      
+        if (currentText === "LOGO") {
+          output.innerHTML += logoBlock + "\n\n"; // Affiche instantanément
+          currentPart++;
+          setTimeout(typeWriterPart, 500); // Petite pause avant de continuer
+          return;
+        }
+      
+        if (index < currentText.length) {
+          output.innerHTML += currentText.charAt(index);
           index++;
           setTimeout(typeWriterPart, 25);
         } else {
@@ -139,7 +148,7 @@ Navigate like a real terminal: 'ls', 'cd', 'open', 'clear'...
           currentPart++;
           if (currentPart < introParts.length) {
             index = 0;
-            setTimeout(typeWriterPart, 500); // Pause entre les blocs
+            setTimeout(typeWriterPart, 500);
           } else {
             introDone = true;
             commandInput.disabled = false;

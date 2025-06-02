@@ -170,8 +170,12 @@ pre {
             setTimeout(typeWriterPart, 500);
           } else {
             introDone = true;
+            document.getElementById("input-line").style.display = "flex"; // 👈 Affiche la ligne de commande
             commandInput.disabled = false;
             commandInput.focus();
+            setTimeout(() => {
+              output.scrollTop = output.scrollHeight;
+            }, 50);
           }
         }
       }
@@ -227,7 +231,7 @@ pre {
         if (e.key === "Enter") {
           const command = commandInput.value.trim();
           commandInput.value = "";
-          output.innerHTML += `<span class="prompt">${prompt}</span><span class="command">${command}</span><br>`;
+          output.innerHTML += `<span class="prompt">Terminal@guest:~# </span><span class="command">${command}</span><br>`;
           executeCommand(command);
         }
         if (e.key === "Tab") {

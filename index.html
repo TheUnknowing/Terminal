@@ -152,8 +152,8 @@ pre {
  > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n`,
           speed: 1  // plus rapide ici
         },
-        { content: `Welcome to xhd’s virtual terminal.`, speed: 15 },
-        { content: `Type 'help' to display available commands.\nNavigate like a real terminal: 'ls', 'cd', 'open', 'clear'...`, speed: 15 }
+        { content: `Welcome to xhd’s terminal.`, speed: 15 },
+        { content: `Type 'help' to display available commands.\nHope you are familiar with linux terminals :D`, speed: 15 }
       ];
       
       let currentPart = 0;
@@ -220,10 +220,10 @@ pre {
         },
         help: () => {
           return `
-<strong>Liste des commandes disponibles :</strong><br>
+<strong>Available commands :</strong><br>
 <span class="output">ls</span> - Displays files and directories in the current directory.<br>
-<span class="output">cd <i>directory</i></span> - Change directory. Example : 'cd projects'.<br>
-<span class="output">open <i>file</i></span> - Opens a file. Example: 'wget cv.pdf'.<br>
+<span class="output">cd <i>directory</i></span> - Change directory. Example: 'cd projects'.<br>
+<span class="output">open <i>file</i></span> - Opens a file. Example: 'open cv.pdf'.<br>
 <span class="output">clear</span> - Clears the terminal screen.<br>
 <span class="output">help</span> - Displays the list of commands.<br>`;
         }

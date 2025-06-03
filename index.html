@@ -108,11 +108,11 @@ pre {
   <div class="terminal">
     <pre id="output"></pre>
     <div id="input-line" style="display: none; width: 100%;">
-      <span id="p" class="prompt">Terminal@guest:~# </span>
+      <span class="prompt">Terminal@guest:~# </span>
       <input type="text" id="command" autofocus>
     </div>
   </div>
-
+  
   <script>
     if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       window.location.href = "./mobile/index.html";
@@ -128,7 +128,7 @@ pre {
       let currentDirectory = "Terminal"; 
       const files = ["cv.pdf"];
       const directories = ["projects", "contact", "gym", "profile"]; 
-      const commandsList = ["ls", "cd", "open", "clear", "help", "sudo su", "exit"];
+      const commandsList = ["ls", "cd", "open", "clear", "help", "sudo"];
       let rootMode = false;
       let awaitingSecretAnswer = false;
 
@@ -197,22 +197,22 @@ pre {
             if (rootMode) allDirs.push("secret");
             return `${allDirs.join("  ")}  ${files.join("  ")}`;
           }
-          return "Aucun fichier ici.";
+          return "Nothing Found.";
         },
         open: (args) => {
           if (!args[0]) return "Veuillez spécifier un fichier.";
           if (args[0] === "cv.pdf" && currentDirectory === "Terminal") {
             window.location.href = `${githubBaseURL}/cv.pdf`;
-            return "Téléchargement de cv.pdf...";
+            return "Opening cv.pdf...";
           }
-          return "Fichier non trouvé.";
+          return "404 File Not Found.";
         },
         cd: (args) => {
-          if (!args[0]) return "Veuillez spécifier un répertoire.";
+          if (!args[0]) return "Specify a directory.";
       
           // Accès au dossier secret uniquement en mode root
           if (args[0] === "secret" && rootMode) {
-            output.innerHTML += `<span class="output">Accès à 'secret'...</span><br>`;
+            output.innerHTML += `<span class="output">Wanna see my secret?</span><br>`;
             setTimeout(() => {
               window.location.href = `${githubBaseURL}/secret/index.html`;
             }, 1000);
@@ -220,39 +220,55 @@ pre {
           }
       
           if (directories.includes(args[0])) {
-            output.innerHTML += `<span class="output">Accès à '${args[0]}'...</span><br>`;
+            output.innerHTML += `<span class="output">Access to '${args[0]}'...</span><br>`;
             setTimeout(() => {
               window.location.href = `${githubBaseURL}/${args[0]}/index.html`;
             }, 1000);
             return "";
           }
       
-          return "Répertoire non trouvé.";
+          return "Directory Not Found.";
         },
         clear: () => {
           output.innerHTML = "";
           return "";
         },
         exit: () => {
-          if (!rootMode) return "Vous n'êtes pas en mode root.";
+          if (!rootMode) return "You are not root.";
           rootMode = false;
         
           document.body.classList.remove("root-mode");
-          document.getElementById("p").textContent = "Terminal@guest:~# ";
+          document.getElementByClassName("prompt").textContent = "Terminal@guest:~# ";
         
           return "[ Root mode exited. You're back to normal user. ]";
         },
         help: () => {
           return `
-      <strong>Available commands :</strong><br>
-      <span class="output">ls</span> - Displays files and directories in the current directory.<br>
-      <span class="output">cd <i>directory</i></span> - Change directory. Example: 'cd projects'.<br>
-      <span class="output">open <i>file</i></span> - Opens a file. Example: 'open cv.pdf'.<br>
-      <span class="output">clear</span> - Clears the terminal screen.<br>
-      <span class="output">help</span> - Displays the list of commands.<br>
-      <span class="output">sud...</span> - Nevermind haha...<br>`;
+<strong>Available commands :</strong><br>
+<span class="output">ls</span> - Displays files and directories in the current directory.<br>
+<span class="output">cd <i>directory</i></span> - Change directory. Example: 'cd projects'.<br>
+<span class="output">open <i>file</i></span> - Opens a file. Example: 'open cv.pdf'.<br>
+<span class="output">clear</span> - Clears the terminal screen.<br>
+<span class="output">help</span> - Displays the list of commands.<br>
+<span class="output">su...</span> - Nevermind haha...<br>`;
         }
       };
+
+      // Gestion des commandes
+      commandInput.addEventListener("keydown", (e) => {
+        if (!introDone) return; // Bloque tant que l'intro n'est pas terminée
+        if (e.key === "Enter") {
+          const command = commandInput.value.trim();
+          commandInput.value = "";
+          const p = rootMode ? "Terminal@root:~#" : "Terminal@guest:~#";
+          output.innerHTML += `<span class="prompt">${p} </span><span class="command">${command}</span><br>`;
+          executeCommand(command);
+        }
+        if (e.key === "Tab") {
+          e.preventDefault();
+          autocomplete(commandInput);
+        }
+      });
 
       function executeCommand(command) {
         const args = command.split(" ");
@@ -270,19 +286,34 @@ pre {
             document.body.style.backgroundColor = "#200";
           
             // Changer le prompt dans l'input-line
-            document.getElementById("p").textContent = "Terminal@root:~# ";
+            document.getElementByClassName("prompt").textContent = "Terminal@root:~# ";
           
-            output.innerHTML += `<span class="output">[ Root mode activated. You now have access to hidden commands. ]</span><br><br>`;
+            output.innerHTML += `<span class="output">[ Root mode activated ]</span><br><br>`;
           } else {
             awaitingSecretAnswer = false;
-            output.innerHTML += `<span class="output">[ Access denied. Returning to normal mode. ]</span><br><br>`;
+            output.innerHTML += `<span class="output">[ Access denied ]</span><br><br>`;
           }
           return;
         }
       
         if (cmd === "sudo" && args[1] === "su") {
           awaitingSecretAnswer = true;
-          output.innerHTML += `<span class="output">[ Authentication required ]<br>What do you like most?</span><br><br>`;
+          output.innerHTML += `<span class="output">[ Authentication required ]<br>Here is a riddle : 
+I walk around with silent grace,
+I rule your home, I own your space.
+I look at you with calm disdain,
+Yet cry for food like I’m in pain.
+
+I scream at night, it so much fun,
+Then sleep all day beneath the sun.
+I stare at walls, I scratch your chair,
+And leave you fur just everywhere.
+
+I zoom around like I’m possessed,
+Then take a nap right on your chest.
+You bought me toys? That’s pretty sweet.
+But cardboard boxes can’t be beat.
+</span><br><br>`;
           return;
         }
       

@@ -296,6 +296,9 @@ pre {
             awaitingSecretAnswer = false;
             output.innerHTML += `<span class="output">[ Access denied ]</span><br><br>`;
           }
+          setTimeout(() => {
+          output.scrollTop = output.scrollHeight;
+        }, 50);
           return;
         }
       

@@ -240,7 +240,7 @@ pre {
           // Changement de style en mode root
           document.querySelector(".terminal").style.border = "2px solid green";
           document.querySelector(".terminal").style.boxShadow = "0 0 15px green";
-          document.body.style.backgroundColor = "#200";
+          document.body.style.backgroundColor = "#000000";
           document.getElementById("baseprompt").textContent = "Terminal@guest:~# ";
         
           return "[ Root mode exited. You're back to normal user ]";
@@ -301,7 +301,8 @@ pre {
       
         if (cmd === "sudo" && args[1] === "su") {
           awaitingSecretAnswer = true;
-          output.innerHTML += `<span class="output">[ Authentication required ]<br>Here is a riddle : 
+          output.innerHTML += `<span class="output">[ Authentication required ]<br><br>Solve the riddle :
+
 I walk around with silent grace,
 I rule your home, I own your space.
 I look at you with calm disdain,
@@ -318,7 +319,10 @@ You bought me toys? That’s pretty sweet.
 But cardboard boxes can’t be beat.
 
 Who am i?
-</span><br><br>`;
+</span><br>`;
+          setTimeout(() => {
+          output.scrollTop = output.scrollHeight;
+        }, 50);
           return;
         }
       

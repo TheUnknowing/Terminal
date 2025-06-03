@@ -108,7 +108,7 @@ pre {
   <div class="terminal">
     <pre id="output"></pre>
     <div id="input-line" style="display: none; width: 100%;">
-      <span class="prompt">Terminal@guest:~# </span>
+      <span id="baseprompt" class="prompt">Terminal@guest:~# </span>
       <input type="text" id="command" autofocus>
     </div>
   </div>
@@ -134,7 +134,7 @@ pre {
 
       // Introduction avant le shell
       const introParts = [
-        { content: `[ xhd v1.3 booting... ]`, speed: 15 },
+        { content: `[ xhd v1.4 booting... ]`, speed: 15 },
         { content: `Initializing shell session... Please wait.`, speed: 15 },
         { content: `
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
@@ -236,11 +236,14 @@ pre {
         exit: () => {
           if (!rootMode) return "You are not root.";
           rootMode = false;
+
+          // Changement de style en mode root
+          document.querySelector(".terminal").style.border = "2px solid green";
+          document.querySelector(".terminal").style.boxShadow = "0 0 15px green";
+          document.body.style.backgroundColor = "#200";
+          document.getElementById("baseprompt").textContent = "Terminal@guest:~# ";
         
-          document.body.classList.remove("root-mode");
-          document.getElementByClassName("prompt").textContent = "Terminal@guest:~# ";
-        
-          return "[ Root mode exited. You're back to normal user. ]";
+          return "[ Root mode exited. You're back to normal user ]";
         },
         help: () => {
           return `
@@ -286,7 +289,7 @@ pre {
             document.body.style.backgroundColor = "#200";
           
             // Changer le prompt dans l'input-line
-            document.getElementByClassName("prompt").textContent = "Terminal@root:~# ";
+            document.getElementById("baseprompt").textContent = "Terminal@root:~# ";
           
             output.innerHTML += `<span class="output">[ Root mode activated ]</span><br><br>`;
           } else {
@@ -313,6 +316,8 @@ I zoom around like I’m possessed,
 Then take a nap right on your chest.
 You bought me toys? That’s pretty sweet.
 But cardboard boxes can’t be beat.
+
+Who am i?
 </span><br><br>`;
           return;
         }
@@ -321,7 +326,7 @@ But cardboard boxes can’t be beat.
           const result = commands[cmd](args.slice(1));
           if (result) output.innerHTML += `<span class="output">${result}</span><br><br>`;
         } else {
-          output.innerHTML += `<span class="output">Commande inconnue: ${cmd}</span><br><br>`;
+          output.innerHTML += `<span class="output">Unknown command: ${cmd}</span><br><br>`;
         }
       
         setTimeout(() => {

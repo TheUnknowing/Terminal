@@ -108,7 +108,7 @@ pre {
   <div class="terminal">
     <pre id="output"></pre>
     <div id="input-line" style="display: none; width: 100%;">
-      <span class="prompt">Terminal@guest:~# </span>
+      <span id="p" class="prompt">Terminal@guest:~# </span>
       <input type="text" id="command" autofocus>
     </div>
   </div>
@@ -128,7 +128,9 @@ pre {
       let currentDirectory = "Terminal"; 
       const files = ["cv.pdf"];
       const directories = ["projects", "contact", "gym", "profile"]; 
-      const commandsList = ["ls", "cd", "open", "clear", "help"];
+      const commandsList = ["ls", "cd", "open", "clear", "help", "sudo su", "exit"];
+      let rootMode = false;
+      let awaitingSecretAnswer = false;
 
       // Introduction avant le shell
       const introParts = [
@@ -191,7 +193,9 @@ pre {
       const commands = {
         ls: () => {
           if (currentDirectory === "Terminal") {
-            return `${directories.join("  ")}  ${files.join("  ")}`;
+            const allDirs = [...directories];
+            if (rootMode) allDirs.push("secret");
+            return `${allDirs.join("  ")}  ${files.join("  ")}`;
           }
           return "Aucun fichier ici.";
         },
@@ -205,6 +209,16 @@ pre {
         },
         cd: (args) => {
           if (!args[0]) return "Veuillez spécifier un répertoire.";
+      
+          // Accès au dossier secret uniquement en mode root
+          if (args[0] === "secret" && rootMode) {
+            output.innerHTML += `<span class="output">Accès à 'secret'...</span><br>`;
+            setTimeout(() => {
+              window.location.href = `${githubBaseURL}/secret/index.html`;
+            }, 1000);
+            return "";
+          }
+      
           if (directories.includes(args[0])) {
             output.innerHTML += `<span class="output">Accès à '${args[0]}'...</span><br>`;
             setTimeout(() => {
@@ -212,49 +226,73 @@ pre {
             }, 1000);
             return "";
           }
+      
           return "Répertoire non trouvé.";
         },
         clear: () => {
           output.innerHTML = "";
           return "";
         },
+        exit: () => {
+          if (!rootMode) return "Vous n'êtes pas en mode root.";
+          rootMode = false;
+        
+          document.body.classList.remove("root-mode");
+          document.getElementById("p").textContent = "Terminal@guest:~# ";
+        
+          return "[ Root mode exited. You're back to normal user. ]";
+        },
         help: () => {
           return `
-<strong>Available commands :</strong><br>
-<span class="output">ls</span> - Displays files and directories in the current directory.<br>
-<span class="output">cd <i>directory</i></span> - Change directory. Example: 'cd projects'.<br>
-<span class="output">open <i>file</i></span> - Opens a file. Example: 'open cv.pdf'.<br>
-<span class="output">clear</span> - Clears the terminal screen.<br>
-<span class="output">help</span> - Displays the list of commands.<br>`;
+      <strong>Available commands :</strong><br>
+      <span class="output">ls</span> - Displays files and directories in the current directory.<br>
+      <span class="output">cd <i>directory</i></span> - Change directory. Example: 'cd projects'.<br>
+      <span class="output">open <i>file</i></span> - Opens a file. Example: 'open cv.pdf'.<br>
+      <span class="output">clear</span> - Clears the terminal screen.<br>
+      <span class="output">help</span> - Displays the list of commands.<br>
+      <span class="output">sud...</span> - Nevermind haha...<br>`;
         }
       };
-
-      // Gestion des commandes
-      commandInput.addEventListener("keydown", (e) => {
-        if (!introDone) return; // Bloque tant que l'intro n'est pas terminée
-        if (e.key === "Enter") {
-          const command = commandInput.value.trim();
-          commandInput.value = "";
-          output.innerHTML += `<span class="prompt">Terminal@guest:~# </span><span class="command">${command}</span><br>`;
-          executeCommand(command);
-        }
-        if (e.key === "Tab") {
-          e.preventDefault();
-          autocomplete(commandInput);
-        }
-      });
 
       function executeCommand(command) {
         const args = command.split(" ");
         const cmd = args[0];
-
+      
+        if (awaitingSecretAnswer) {
+          const answer = command.toLowerCase();
+          if (answer === "cat") {
+            rootMode = true;
+            awaitingSecretAnswer = false;
+          
+            // Changement de style en mode root
+            document.querySelector(".terminal").style.border = "2px solid red";
+            document.querySelector(".terminal").style.boxShadow = "0 0 15px red";
+            document.body.style.backgroundColor = "#200";
+          
+            // Changer le prompt dans l'input-line
+            document.getElementById("p").textContent = "Terminal@root:~# ";
+          
+            output.innerHTML += `<span class="output">[ Root mode activated. You now have access to hidden commands. ]</span><br><br>`;
+          } else {
+            awaitingSecretAnswer = false;
+            output.innerHTML += `<span class="output">[ Access denied. Returning to normal mode. ]</span><br><br>`;
+          }
+          return;
+        }
+      
+        if (cmd === "sudo" && args[1] === "su") {
+          awaitingSecretAnswer = true;
+          output.innerHTML += `<span class="output">[ Authentication required ]<br>What do you like most?</span><br><br>`;
+          return;
+        }
+      
         if (commands[cmd]) {
           const result = commands[cmd](args.slice(1));
           if (result) output.innerHTML += `<span class="output">${result}</span><br><br>`;
         } else {
           output.innerHTML += `<span class="output">Commande inconnue: ${cmd}</span><br><br>`;
         }
-
+      
         setTimeout(() => {
           output.scrollTop = output.scrollHeight;
         }, 50);

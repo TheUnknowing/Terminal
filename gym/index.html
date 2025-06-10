@@ -214,7 +214,7 @@
             } else {
                 clearInterval(interval);
             }
-            daysElement.textContent = `${currentYears} ans - ${currentMonths} mois - ${currentDays} jours.`;
+            daysElement.textContent = `${currentYears} years - ${currentMonths} months - ${currentDays} days.`;
         }, 50); // vitesse de l'animation (plus bas = plus rapide)
     }
     
@@ -267,7 +267,7 @@
     createChart('deadliftChart', deadliftData, 'Deadlift PR (kg)', '#cc65fe');
 
     // DOTS
-    const bodyWeight = 85;
+    const bodyWeight = 86;
     const totalLift = squatData.at(-1) + benchData.at(-1) + deadliftData.at(-1);
 
     function calculateDOTS(bodyweight, total) {

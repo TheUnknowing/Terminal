@@ -18,30 +18,23 @@
     }
 
     canvas.matrix {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: -1;
-        width: 100vw;
-        height: 100vh;
-        pointer-events: none;
-        opacity: 0.1; /* léger pour pas gêner la lecture */
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
 
-    h2, h3 {
+    h1, h2, h3 {
       color: #00ff00;
     }
 
-    /* Pour que les sections passent bien par-dessus */
-    .section, footer, h1 {
-        position: relative;
-        z-index: 1;
-        background-color: rgba(0, 0, 0, 0.75);
-        border: 1px solid #00ff00;
-        box-shadow: 0 0 15px #00ff00;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 30px;
+    .section {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 0 15px #00ff00;
     }
 
     .lift-title {
@@ -80,23 +73,27 @@
       content: "";
     }
 
-    /* Stylisation du compteur de jours façon terminal */
-    #daysCount {
-        font-size: 1.3rem;
-        background: rgba(0, 255, 0, 0.1);
-        padding: 10px;
-        border: 1px solid #00ff00;
-        width: fit-content;
-        margin-top: 10px;
-        white-space: pre;
-        font-family: monospace;
-        color: #00ff00;
+    footer {
+      border-top: 1px solid #00ff00;
+      padding-top: 10px;
+      font-size: 0.9em;
+      color: #00ff00;
     }
+
+    #daysCount {
+      font-size: 1.3em;
+      white-space: pre;
+      background-color: black;
+      padding: 10px;
+      border-left: 4px solid #00ff00;
+      font-family: monospace;
+    }
+
   </style>
 </head>
 <body>
 
-  <canvas id="matrix-canvas"></canvas>
+  <canvas class="matrix"></canvas>
 
   <h1>Powerlifting Terminal</h1>
 
@@ -146,45 +143,31 @@
   </footer>
 
   <script>
-    // Matrix Rain Animation
-    const canvas = document.querySelector('canvas.matrix');
-    const ctx = canvas.getContext('2d');
-
-    canvas.width = window.innerWidth;
+    // Matrix Rain Background
+    const canvas = document.querySelector("canvas.matrix");
+    const ctx = canvas.getContext("2d");
     canvas.height = window.innerHeight;
-
-    const letters = "アァイィウヴカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const matrix = letters.split("");
-
+    canvas.width = window.innerWidth;
+    const matrix = "01";
     const fontSize = 14;
     const columns = canvas.width / fontSize;
-    const drops = new Array(Math.floor(columns)).fill(1);
+    const drops = Array.from({ length: columns }, () => 1);
 
-    function draw() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = "#0F0";
-        ctx.font = fontSize + "px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = matrix[Math.floor(Math.random() * matrix.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i]++;
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#0f0";
+      ctx.font = fontSize + "px monospace";
+      for (let i = 0; i < drops.length; i++) {
+        const text = matrix[Math.floor(Math.random() * matrix.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
         }
+        drops[i]++;
+      }
     }
-
-    setInterval(draw, 33);
-
-    // Resize handler
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
+    setInterval(drawMatrix, 33);
 
     // Time Since First Day
     const startDate = new Date(2021, 9, 20);
@@ -265,7 +248,7 @@
     createChart('deadliftChart', deadliftData, 'Deadlift PR (kg)', '#cc65fe');
 
     // DOTS
-    const bodyWeight = 86;
+    const bodyWeight = 85;
     const totalLift = squatData.at(-1) + benchData.at(-1) + deadliftData.at(-1);
 
     function calculateDOTS(bodyweight, total) {

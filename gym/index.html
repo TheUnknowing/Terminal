@@ -31,7 +31,7 @@
       color: #00ff00;
     }
 
-    .section {
+    .section, h1 {
       position: relative;
       z-index: 1;
       background: rgba(0, 0, 0, 0.75);
@@ -101,6 +101,43 @@
       color: #4ade80;
       animation: none;
     }
+
+    #prSection h2 {
+      margin-bottom: 20px;
+    }
+    .pr-lift {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Orbitron', monospace;
+      border: 1px solid #00ff00;
+      padding: 12px 20px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background: rgba(0, 255, 0, 0.1);
+      box-shadow: 0 0 8px #00ff00;
+      color: #aaffaa;
+      font-size: 1.3rem;
+    }
+    .pr-lift .title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      flex-basis: 30%;
+    }
+    .pr-lift .pr-value {
+      font-weight: 900;
+      font-size: 2rem;
+      flex-basis: 40%;
+      text-align: center;
+      color: #00ff00;
+    }
+    .pr-lift .progress {
+      font-weight: 600;
+      font-size: 1.2rem;
+      flex-basis: 30%;
+      text-align: right;
+      color: #55ff55;
+    }
     
   </style>
 </head>
@@ -108,20 +145,18 @@
 
   <canvas class="matrix"></canvas>
 
-  <div class="section">
-    <h1>Powerlifting Terminal</h1>
-  </div>
+  <h1>Powerlifting Terminal</h1>
     
   <div class="section" id="timeInGym">
     <h2>Time since the first day at gym :</h2>
     <pre id="daysCount">Loading...</pre>
   </div>
 
-  <div class="section">
-    <h2>PR Actuels & Objectifs :</h2>
-    <p class="glitch-text" id="prSquat"></p>
-    <p class="glitch-text" id="prBench"></p>
-    <p class="glitch-text" id="prDeadlift"></p>
+  <div class="section" id="prSection">
+    <h2>PRs</h2>
+    <div class="pr-lift" id="prSquat"></div>
+    <div class="pr-lift" id="prBench"></div>
+    <div class="pr-lift" id="prDeadlift"></div>
   </div>
   
   <div class="section">
@@ -343,6 +378,23 @@
     glitchText(document.getElementById("prSquat"), `🦵 Squat PR: ${squatPR}kg (${squatProgress}%)`);
     glitchText(document.getElementById("prBench"), `🏅 Bench PR: ${benchPR}kg (${benchProgress}%)`);
     glitchText(document.getElementById("prDeadlift"), `💀 Deadlift PR: ${deadliftPR}kg (${deadliftProgress}%)`);
+
+    function createPRLine(elementId, icon, name, pr, goal) {
+      const progress = ((pr / goal) * 100).toFixed(1);
+      const container = document.getElementById(elementId);
+      container.innerHTML = `
+        <span class="title">${icon} ${name}</span>
+        <span class="pr-value">${pr} kg</span>
+        <span class="progress">${progress}%</span>
+      `;
+      glitchText(container.querySelector(".title"), `${icon} ${name}`);
+      glitchText(container.querySelector(".pr-value"), `${pr} kg`);
+      glitchText(container.querySelector(".progress"), `${progress}%`);
+    }
+  
+    createPRLine("prSquat", "🦵", "Squat PR", squatPR, squatGoal);
+    createPRLine("prBench", "🏅", "Bench PR", benchPR, benchGoal);
+    createPRLine("prDeadlift", "💀", "Deadlift PR", deadliftPR, deadliftGoal);
   </script>
 </body>
 </html>

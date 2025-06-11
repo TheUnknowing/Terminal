@@ -114,6 +114,13 @@
     <h2>Time since the first day at gym :</h2>
     <pre id="daysCount">Loading...</pre>
   </div>
+
+  <div class="section">
+    <h2>PR Actuels & Objectifs :</h2>
+    <p class="glitch-text" id="prSquat"></p>
+    <p class="glitch-text" id="prBench"></p>
+    <p class="glitch-text" id="prDeadlift"></p>
+  </div>
   
   <div class="section">
     <h2>Progression</h2>
@@ -319,6 +326,21 @@
         setTimeout(() => glitchText(el, text), 300 + Math.random() * 500);
       });
     });
+    const squatPR = squatData.at(-1);
+    const benchPR = benchData.at(-1);
+    const deadliftPR = deadliftData.at(-1);
+
+    const squatGoal = 180;
+    const benchGoal = 140;
+    const deadliftGoal = 220;
+
+    const squatProgress = ((squatPR / squatGoal) * 100).toFixed(1);
+    const benchProgress = ((benchPR / benchGoal) * 100).toFixed(1);
+    const deadliftProgress = ((deadliftPR / deadliftGoal) * 100).toFixed(1);
+
+    glitchText(document.getElementById("prSquat"), `🦵 Squat PR: ${squatPR}kg (${squatProgress}%)`);
+    glitchText(document.getElementById("prBench"), `🏅 Bench PR: ${benchPR}kg (${benchProgress}%)`);
+    glitchText(document.getElementById("prDeadlift"), `💀 Deadlift PR: ${deadliftPR}kg (${deadliftProgress}%)`);
   </script>
 </body>
 </html>

@@ -29,9 +29,11 @@
 
     h1, h2, h3 {
       color: #00ff00;
+      z-index: 1;
+      position: relative;
     }
 
-    .section, h1 {
+    .section {
       position: relative;
       z-index: 1;
       background: rgba(0, 0, 0, 0.75);
@@ -103,40 +105,65 @@
     }
 
     #prSection h2 {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      font-family: 'Orbitron', monospace;
+      color: #00ff00;
+      text-shadow: 0 0 8px #00ff00;
     }
     .pr-lift {
+      font-family: 'Orbitron', monospace;
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #00ff00;
+      border-radius: 10px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px #00ff00;
+      color: #aaffaa;
+    }
+    .pr-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-family: 'Orbitron', monospace;
-      border: 1px solid #00ff00;
-      padding: 12px 20px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      background: rgba(0, 255, 0, 0.1);
-      box-shadow: 0 0 8px #00ff00;
+      font-weight: 600;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
       color: #aaffaa;
-      font-size: 1.3rem;
     }
-    .pr-lift .title {
+    .pr-header .title {
+      flex-basis: 35%;
       font-weight: 700;
-      font-size: 1.5rem;
-      flex-basis: 30%;
-    }
-    .pr-lift .pr-value {
-      font-weight: 900;
-      font-size: 2rem;
-      flex-basis: 40%;
-      text-align: center;
+      font-size: 1.6rem;
       color: #00ff00;
     }
-    .pr-lift .progress {
+    .pr-header .pr-value {
+      flex-basis: 30%;
+      font-weight: 900;
+      font-size: 2.1rem;
+      text-align: center;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+    .pr-header .progress {
+      flex-basis: 25%;
       font-weight: 600;
       font-size: 1.2rem;
-      flex-basis: 30%;
       text-align: right;
       color: #55ff55;
+    }
+    .progress-bar-container {
+      background: rgba(0, 255, 0, 0.15);
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: inset 0 0 6px #00ff00;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00ff00 0%, #55ff55 100%);
+      border-radius: 6px;
+      box-shadow: 0 0 8px #00ff00;
+      transition: width 1.2s ease-out;
     }
     
   </style>
@@ -154,9 +181,39 @@
 
   <div class="section" id="prSection">
     <h2>PRs</h2>
-    <div class="pr-lift" id="prSquat"></div>
-    <div class="pr-lift" id="prBench"></div>
-    <div class="pr-lift" id="prDeadlift"></div>
+  
+    <div class="pr-lift" id="prSquat">
+      <div class="pr-header">
+        <span class="title">🦵 Squat PR</span>
+        <span class="pr-value">-- kg</span>
+        <span class="progress">--%</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+  
+    <div class="pr-lift" id="prBench">
+      <div class="pr-header">
+        <span class="title">🏅 Bench PR</span>
+        <span class="pr-value">-- kg</span>
+        <span class="progress">--%</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+  
+    <div class="pr-lift" id="prDeadlift">
+      <div class="pr-header">
+        <span class="title">💀 Deadlift PR</span>
+        <span class="pr-value">-- kg</span>
+        <span class="progress">--%</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
   </div>
   
   <div class="section">
@@ -363,38 +420,32 @@
         setTimeout(() => glitchText(el, text), 300 + Math.random() * 500);
       });
     });
-    const squatPR = squatData.at(-1);
-    const benchPR = benchData.at(-1);
-    const deadliftPR = deadliftData.at(-1);
-
-    const squatGoal = 180;
-    const benchGoal = 140;
-    const deadliftGoal = 220;
-
-    const squatProgress = ((squatPR / squatGoal) * 100).toFixed(1);
-    const benchProgress = ((benchPR / benchGoal) * 100).toFixed(1);
-    const deadliftProgress = ((deadliftPR / deadliftGoal) * 100).toFixed(1);
-
-    glitchText(document.getElementById("prSquat"), `🦵 Squat PR: ${squatPR}kg (${squatProgress}%)`);
-    glitchText(document.getElementById("prBench"), `🏅 Bench PR: ${benchPR}kg (${benchProgress}%)`);
-    glitchText(document.getElementById("prDeadlift"), `💀 Deadlift PR: ${deadliftPR}kg (${deadliftProgress}%)`);
-
-    function createPRLine(elementId, icon, name, pr, goal) {
-      const progress = ((pr / goal) * 100).toFixed(1);
+    function setPRProgress(elementId, pr, goal) {
       const container = document.getElementById(elementId);
-      container.innerHTML = `
-        <span class="title">${icon} ${name}</span>
-        <span class="pr-value">${pr} kg</span>
-        <span class="progress">${progress}%</span>
-      `;
-      glitchText(container.querySelector(".title"), `${icon} ${name}`);
-      glitchText(container.querySelector(".pr-value"), `${pr} kg`);
-      glitchText(container.querySelector(".progress"), `${progress}%`);
+      const progressPercent = Math.min(((pr / goal) * 100), 100).toFixed(1);
+      const prValueElem = container.querySelector(".pr-value");
+      const progressElem = container.querySelector(".progress");
+      const progressBar = container.querySelector(".progress-bar");
+  
+      prValueElem.textContent = pr + " kg";
+      progressElem.textContent = progressPercent + "%";
+      // Animation with setTimeout to allow CSS transition
+      setTimeout(() => {
+        progressBar.style.width = progressPercent + "%";
+      }, 50);
     }
   
-    createPRLine("prSquat", "🦵", "Squat PR", squatPR, squatGoal);
-    createPRLine("prBench", "🏅", "Bench PR", benchPR, benchGoal);
-    createPRLine("prDeadlift", "💀", "Deadlift PR", deadliftPR, deadliftGoal);
+    // Exemple de valeurs (à remplacer par tes variables)
+    const squatPR = 150;
+    const squatGoal = 180;
+    const benchPR = 130;
+    const benchGoal = 140;
+    const deadliftPR = 190;
+    const deadliftGoal = 220;
+  
+    setPRProgress("prSquat", squatPR, squatGoal);
+    setPRProgress("prBench", benchPR, benchGoal);
+    setPRProgress("prDeadlift", deadliftPR, deadliftGoal);
   </script>
 </body>
 </html>

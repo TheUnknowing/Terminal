@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programme d’entraînement</title>
+  <style>
+    /* Reset de base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Courier New", monospace;
+      background: #0a0a0a;
+      color: #fff;
+      padding-top: 100px;
+      transition: background 0.3s;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #111;
+      border-bottom: 2px solid #fff;
+      padding: 15px 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    nav button {
+      padding: 10px 20px;
+      border: 2px solid;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 5px rgba(255,255,255,0.5);
+    }
+
+    nav button:hover {
+      color: #111;
+      text-shadow: 0 0 15px currentColor, 0 0 30px currentColor;
+      box-shadow: 0 0 20px currentColor, 0 0 40px currentColor inset;
+    }
+
+    /* Couleurs par jour */
+    #btn-squat { color: #ff3cac; border-color: #ff3cac; }
+    #btn-bench { color: #00ffff; border-color: #00ffff; }
+    #btn-ohp { color: #fffa00; border-color: #fffa00; }
+    #btn-deadlift { color: #ff6f00; border-color: #ff6f00; }
+    #btn-pullup { color: #00ff00; border-color: #00ff00; }
+    #btn-dips { color: #ff00ff; border-color: #ff00ff; }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 30px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      animation: fadeIn 0.5s ease-in-out;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: center;
+      font-size: 1em;
+    }
+
+    th {
+      background: rgba(255,255,255,0.1);
+      color: inherit;
+      text-shadow: 0 0 5px currentColor;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255,255,255,0.05);
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.15);
+      transition: 0.3s;
+    }
+
+    .sheet {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      font-size: 1.5em;
+      text-align: center;
+      text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --------- MOBILE (GSM) --------- */
+    @media (max-width: 600px) {
+      body {
+        padding-top: 120px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      nav button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+
+      th, td {
+        padding: 8px 10px;
+        font-size: 0.85em;
+      }
+
+      h2 {
+        font-size: 1.2em;
+      }
+
+      main {
+        padding: 0 10px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Programme d’entraînement</h1>
+    <nav>
+      <button id="btn-squat" onclick="showSheet('squat')">Squat</button>
+      <button id="btn-bench" onclick="showSheet('bench')">Bench</button>
+      <button id="btn-ohp" onclick="showSheet('ohp')">Overhead Press</button>
+      <button id="btn-deadlift" onclick="showSheet('deadlift')">Deadlift</button>
+      <button id="btn-pullup" onclick="showSheet('pullup')">Pull-up</button>
+      <button id="btn-dips" onclick="showSheet('dips')">Dips</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="squat" class="sheet"></div>
+    <div id="bench" class="sheet"></div>
+    <div id="ohp" class="sheet"></div>
+    <div id="deadlift" class="sheet"></div>
+    <div id="pullup" class="sheet"></div>
+    <div id="dips" class="sheet"></div>
+  </main>
+
+  <script>
+    async function loadSheet(sheetUrl, elementId, title, color) {
+      const res = await fetch(sheetUrl);
+      const text = await res.text();
+      const rows = text.split("\n").map(r => r.split(","));
+
+      let html = `<h2 style="color:${color}">${title}</h2><table>`;
+      rows.forEach((row, i) => {
+        html += "<tr>";
+        row.forEach(cell => {
+          html += i === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
+        });
+        html += "</tr>";
+      });
+      html += "</table>";
+      document.getElementById(elementId).innerHTML = html;
+    }
+
+    function showSheet(id) {
+      document.querySelectorAll(".sheet").forEach(div => div.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // Chargement des feuilles CSV
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1760366903", "squat", "Squat — Jour Jambes", "#ff3cac");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1561937788", "bench", "Bench — Jour Pecs", "#00ffff");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=878510155", "ohp", "Overhead Press — Jour Épaules", "#fffa00");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=2035311765", "deadlift", "Deadlift — Jour Dos/Jambes", "#ff6f00");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=920457478", "pullup", "Pull-up — Jour Dos", "#00ff00");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1784731766", "dips", "Dips — Jour Triceps", "#ff00ff");
+
+    showSheet("squat");
+  </script>
+</body>
+</html>

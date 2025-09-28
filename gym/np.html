@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Programme d’entraînement</title>
+  <style>
+    body {
+      font-family: "Courier New", monospace;
+      background: #000;
+      color: #0f0;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #000;
+      border-bottom: 1px solid #0f0;
+      padding: 10px 20px;
+      z-index: 1000;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2em;
+      text-shadow: 0 0 10px #0f0;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav button {
+      background: #111;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 8px 16px;
+      margin-right: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      border-radius: 5px;
+    }
+
+    nav button:hover {
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    main {
+      padding: 120px 20px 20px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+      animation: typewriter 1s steps(40) 1;
+    }
+
+    th, td {
+      border: 1px solid currentColor;
+      padding: 8px 12px;
+      text-align: center;
+    }
+
+    th {
+      background: currentColor;
+      color: #000;
+      text-shadow: none;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(0,0,0,0.3);
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .sheet {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .active {
+      display: block;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.5em;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 0.15em solid currentColor;
+      animation: typing 1.5s steps(40) 1, blink 0.75s step-end infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    /* Couleurs par type de jour */
+    #squat { color: #39FF14; }      /* vert néon */
+    #bench { color: #FF3131; }      /* rouge néon */
+    #ohp { color: #1E90FF; }        /* bleu néon */
+    #deadlift { color: #FF8C00; }   /* orange néon */
+    #pullup { color: #FF1493; }     /* rose néon */
+    #dips { color: #FFFF00; }       /* jaune néon */
+
+    nav button#squat-btn { color: #39FF14; border-color: #39FF14; }
+    nav button#bench-btn { color: #FF3131; border-color: #FF3131; }
+    nav button#ohp-btn { color: #1E90FF; border-color: #1E90FF; }
+    nav button#deadlift-btn { color: #FF8C00; border-color: #FF8C00; }
+    nav button#pullup-btn { color: #FF1493; border-color: #FF1493; }
+    nav button#dips-btn { color: #FFFF00; border-color: #FFFF00; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Programme d’entraînement</h1>
+    <nav>
+      <button id="squat-btn" onclick="showSheet('squat')">Squat</button>
+      <button id="bench-btn" onclick="showSheet('bench')">Bench</button>
+      <button id="ohp-btn" onclick="showSheet('ohp')">Overhead Press (assis)</button>
+      <button id="deadlift-btn" onclick="showSheet('deadlift')">Deadlift</button>
+      <button id="pullup-btn" onclick="showSheet('pullup')">Pull-up</button>
+      <button id="dips-btn" onclick="showSheet('dips')">Dips</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="squat" class="sheet"></div>
+    <div id="bench" class="sheet"></div>
+    <div id="ohp" class="sheet"></div>
+    <div id="deadlift" class="sheet"></div>
+    <div id="pullup" class="sheet"></div>
+    <div id="dips" class="sheet"></div>
+  </main>
+
+  <script>
+    async function loadSheet(sheetUrl, elementId, title) {
+      const res = await fetch(sheetUrl);
+      const text = await res.text();
+      const rows = text.split("\n").map(r => r.split(","));
+
+      let html = `<h2>${title}</h2><table>`;
+      rows.forEach((row, i) => {
+        html += "<tr>";
+        row.forEach(cell => {
+          if (i === 0) {
+            html += `<th>${cell}</th>`;
+          } else {
+            html += `<td>${cell}</td>`;
+          }
+        });
+        html += "</tr>";
+      });
+      html += "</table>";
+      document.getElementById(elementId).innerHTML = html;
+    }
+
+    function showSheet(id) {
+      document.querySelectorAll(".sheet").forEach(div => div.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1760366903", "squat", "Squat — Jour Jambes");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1561937788", "bench", "Bench — Jour Pecs");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=878510155", "ohp", "Overhead Press assis — Jour Épaules");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=2035311765", "deadlift", "Deadlift — Jour Dos/Jambes");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=920457478", "pullup", "Pull-up — Jour Dos");
+    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1784731766", "dips", "Dips — Jour Triceps");
+
+    showSheet("squat");
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Programme</title>
+  <style>
+    body { font-family: Arial; background: #111; color: #0f0; }
+    table { border-collapse: collapse; margin: 20px 0; }
+    td, th { border: 1px solid #0f0; padding: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Programme d’entraînement</h1>
+
+  <div id="sheet1"></div>
+  <div id="sheet2"></div>
+
+  <script>
+    async function loadSheet(sheetUrl, elementId, title) {
+      const res = await fetch(sheetUrl);
+      const text = await res.text();
+      const rows = text.split("\n").map(r => r.split(","));
+
+      let html = `<h2>${title}</h2><table>`;
+      rows.forEach(row => {
+        html += "<tr>";
+        row.forEach(cell => html += `<td>${cell}</td>`);
+        html += "</tr>";
+      });
+      html += "</table>";
+
+      document.getElementById(elementId).innerHTML = html;
+    }
+
+    // Remplace par tes URLs CSV (une par feuille)
+    loadSheet(
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pubhtml#gid=1561937788",
+      "sheet1",
+      "Jour 1 : Pecs & Triceps"
+    );
+
+    loadSheet(
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pubhtml#gid=1760366903",
+      "sheet2",
+      "Jour 2 : Jambes"
+    );
+  </script>
+</body>
+</html>

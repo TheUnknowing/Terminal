@@ -173,6 +173,7 @@
       <button id="btn-deadlift" onclick="showSheet('deadlift')">Deadlift</button>
       <button id="btn-pullup" onclick="showSheet('pullup')">Pull-up</button>
       <button id="btn-dips" onclick="showSheet('dips')">Dips</button>
+      <button id="btn-diagram" onclick="showSheet('diagram')">Diagram</button>
     </nav>
   </header>
 
@@ -183,6 +184,10 @@
     <div id="deadlift" class="sheet"></div>
     <div id="pullup" class="sheet"></div>
     <div id="dips" class="sheet"></div>
+    <div id="diagram" class="sheet">
+      <h2 style="color:#ff8800">Répartition Musculaire Totale (%)</h2>
+      <canvas id="muscleChart" width="400" height="400"></canvas>
+    </div>
   </main>
 
   <script>
@@ -217,6 +222,55 @@
     loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1784731766", "dips", "Dips — Jour Triceps", "#ff00ff");
 
     showSheet("squat");
+
+    
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Création du graphique
+    const ctx = document.getElementById('muscleChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Jambes', 'Dos', 'Pecs', 'Triceps', 'Épaules', 'Biceps'],
+        datasets: [{
+          label: 'Muscles travaillés',
+          data: [30, 25, 15, 15, 10, 5],
+          backgroundColor: [
+            '#ff3cac', // Jambes
+            '#00ff00', // Dos
+            '#00ffff', // Pecs
+            '#ff00ff', // Triceps
+            '#fffa00', // Épaules
+            '#ff6f00'  // Biceps
+          ],
+          borderColor: '#0a0a0a',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#fff',
+              font: { size: 14 }
+            }
+          },
+          tooltip: {
+            bodyColor: '#000',
+            backgroundColor: '#fff'
+          }
+        }
+      }
+    });
+  
+    // Mise à jour du diagramme au clic
+    function showSheet(id) {
+      document.querySelectorAll(".sheet").forEach(div => div.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      if (id === 'diagram') chart.update();
+    }
   </script>
 </body>
 </html>

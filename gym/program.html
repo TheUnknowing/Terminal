@@ -33,6 +33,10 @@
       align-items: center;
     }
 
+    html {
+      scroll-padding-top: 100px; /* pour que les titres ne soient pas cachés par le header */
+    }
+
     h1 {
       font-size: 2em;
       color: #fff;
@@ -115,6 +119,13 @@
 
     .sheet {
       display: none;
+      padding-top: 80px; /* Espace pour le header fixe */
+    }
+
+    .sheet h2 {
+      margin-top: 0;
+      margin-bottom: 20px; /* Espace entre le titre et le contenu */
+      text-align: center;
     }
 
     .active {

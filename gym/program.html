@@ -198,7 +198,7 @@
     <div id="dips" class="sheet"></div>
     <div id="diagram" class="sheet" style="text-align:center; padding:20px;">
       <h2> </h2> 
-      <canvas id="muscleChart" width="100" height="100" style="background: rgba(255,255,255,0.05); border-radius: 15px; box-shadow: 0 0 20px #000 inset;"></canvas>
+      <canvas id="muscleChart" width="250" height="250" style="background: rgba(255,255,255,0.05); border-radius: 15px; box-shadow: 0 0 20px #000 inset;"></canvas>
     </div>
   </main>
 
@@ -262,7 +262,8 @@
         }]
       },
       options: {
-        responsive: true,
+        responsive: false,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             position: 'bottom',

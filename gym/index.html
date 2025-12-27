@@ -355,9 +355,9 @@
     animateCounter();
 
     // Chart data
-    const squatData = [75, 100, 115, 165];
-    const benchData = [60, 85, 110, 135];
-    const deadliftData = [90, 130, 160, 200];
+    const squatData = [75, 100, 115, 170];
+    const benchData = [60, 85, 110, 140];
+    const deadliftData = [90, 130, 160, 210];
     const labels = ['2022', '2023', '2024', '2025'];
 
     function createChart(canvasId, data, label, color) {
@@ -401,7 +401,7 @@
     createChart('deadliftChart', deadliftData, 'Deadlift PR (kg)', '#cc65fe');
 
     // DOTS
-    const bodyWeight = 87;
+    const bodyWeight = 90;
     const totalLift = squatData.at(-1) + benchData.at(-1) + deadliftData.at(-1);
 
     function calculateDOTS(bodyweight, total) {
@@ -461,11 +461,11 @@
     }
   
     // Exemple de valeurs (à remplacer par tes variables)
-    const squatPR = 165;
+    const squatPR = 170;
     const squatGoal = 180;
-    const benchPR = 135;
+    const benchPR = 140;
     const benchGoal = 140;
-    const deadliftPR = 200;
+    const deadliftPR = 210;
     const deadliftGoal = 220;
   
     setPRProgress("prSquat", squatPR, squatGoal);

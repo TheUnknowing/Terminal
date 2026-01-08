@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Powerlifting Prep 93kg — Cycle 4 Semaines</title>
+  <title>Powerlifting Prep 93kg — Program</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap');
 
@@ -13,30 +13,13 @@
       font-family: 'Orbitron', sans-serif;
       padding: 20px;
       margin: 0;
-      overflow-x: hidden;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
-      text-shadow: 0 0 20px #00ff88;
-      color: #9affc8;
-      margin-bottom: 5px;
-    }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { text-align: center; font-size: 1.8rem; text-shadow: 0 0 20px #00ff88; color: #9affc8; margin-bottom: 5px; }
+    .subtitle { text-align: center; color: #91ffa0; font-size: 0.8rem; margin-bottom: 25px; }
 
-    .subtitle {
-      text-align: center;
-      color: #91ffa0;
-      font-size: 0.9rem;
-      margin-bottom: 25px;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    /* Dashboard des Maxs */
+    /* Dashboard */
     .dashboard {
       background: rgba(0, 255, 136, 0.1);
       border: 1px solid rgba(0, 255, 136, 0.4);
@@ -49,18 +32,8 @@
       gap: 15px;
     }
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .input-group label {
-      font-size: 0.7rem;
-      color: #77ffcc;
-      margin-bottom: 5px;
-    }
-
+    .input-group { display: flex; flex-direction: column; align-items: center; }
+    .input-group label { font-size: 0.7rem; color: #77ffcc; margin-bottom: 5px; }
     .input-group input, .input-group select {
       background: rgba(0,0,0,0.5);
       border: 1px solid #00ff88;
@@ -68,87 +41,37 @@
       padding: 8px;
       border-radius: 5px;
       font-family: 'Orbitron';
-      width: 80px;
+      width: 85px;
       text-align: center;
     }
+    select { width: 140px !important; }
 
-    select { width: 120px !important; }
-
-    /* Style des Jours */
+    /* Jours */
     .day {
       background: rgba(0, 255, 136, 0.05);
       border: 1px solid rgba(0, 255, 136, 0.2);
       border-radius: 12px;
       margin-bottom: 15px;
       padding: 15px;
-      transition: all 0.3s ease;
+      transition: 0.3s;
       cursor: pointer;
     }
-
-    .day:hover {
-      background: rgba(0, 255, 136, 0.1);
-      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
-    }
-
-    .day h2 {
-      font-size: 1.1rem;
-      color: #77ffcc;
-      margin: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .exercises {
-      margin-top: 15px;
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-
+    .day:hover { background: rgba(0, 255, 136, 0.1); }
+    .day h2 { font-size: 1.1rem; color: #77ffcc; margin: 0; display: flex; justify-content: space-between; }
+    .exercises { display: none; margin-top: 15px; border-top: 1px solid rgba(0, 255, 136, 0.1); padding-top: 10px; }
     .open .exercises { display: block; }
+    .exercises ul { list-style: none; padding: 0; }
+    .exercises li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; }
+    .weight-display { color: #00ff88; font-weight: 600; }
 
-    .exercises ul { list-style: none; padding-left: 0; }
-
-    .exercises li {
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-    }
-
-    .weight-display {
-      color: #00ff88;
-      font-weight: 600;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .note {
-      margin-top: 30px;
-      color: #c4ffc8;
-      background: rgba(0, 255, 136, 0.05);
-      border-left: 3px solid #00ff88;
-      padding: 15px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-    }
-
-    footer {
-      margin-top: 30px;
-      text-align: center;
-      color: #555;
-      font-size: 0.7rem;
-    }
+    .note { margin-top: 30px; color: #c4ffc8; background: rgba(0, 255, 136, 0.05); border-left: 3px solid #00ff88; padding: 15px; font-size: 0.85rem; border-radius: 8px; }
+    footer { margin-top: 30px; text-align: center; color: #555; font-size: 0.7rem; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>PL PREP — ROAD TO 93KG</h1>
+<div class="container">
+    <h1>POWERLIFTING PREP — PROGRAM</h1>
     <p class="subtitle">4 Jours / Semaine • Cycle Linéaire • Peak Intensity</p>
 
     <div class="dashboard">
@@ -165,60 +88,64 @@
         <input type="number" id="maxDeadlift" value="210" oninput="updateWeights()">
       </div>
       <div class="input-group">
-        <label>PHASE</label>
+        <label>SEMAINE</label>
         <select id="weekSelect" onchange="updateWeights()">
-          <option value="0.75">S1 (75%)</option>
-          <option value="0.80">S2 (80%)</option>
-          <option value="0.85">S3 (85%)</option>
-          <option value="0.60">S4 (Deload)</option>
+          <option value="1">S1 - Start</option>
+          <option value="2">S2 - Charge</option>
+          <option value="3">S3 - Peak</option>
+          <option value="4">S4 - Deload</option>
         </select>
       </div>
     </div>
 
     <div class="day open">
-      <h2>Jour 1 — Squat & Bench Acc. <span>−</span></h2>
+      <h2>Jour 1 — Squat Focus + Bench Acc <span>−</span></h2>
       <div class="exercises">
         <ul>
           <li><span>Squat (Compétition) — 3×5</span> <span class="weight-display" id="val-s1"></span></li>
-          <li><span>Close Grip Bench — 3×8</span> <span class="weight-display" id="val-s2"></span></li>
-          <li><span>Fentes Bulgares — 3×10</span> <span class="weight-display">RPE 7</span></li>
-          <li><span>Extensions Triceps — 3×12</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Incline Bench — 2×6-8</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Leg Press — 3×6-10</span> <span class="weight-display">RPE 7</span></li>
+          <li><span>2 Triceps — 2×8-10</span> <span class="weight-display">RPE 7</span></li>
+          <li><span>Chest Fly — 2×6-10</span> <span class="weight-display">RPE 7</span></li>
         </ul>
       </div>
     </div>
 
     <div class="day">
-      <h2>Jour 2 — Deadlift & Dos <span>+</span></h2>
+      <h2>Jour 2 — Deadlift Focus + Squat Acc <span>+</span></h2>
       <div class="exercises">
         <ul>
           <li><span>Deadlift (Compétition) — 3×3</span> <span class="weight-display" id="val-d1"></span></li>
           <li><span>Pause Squat (2s) — 3×4</span> <span class="weight-display" id="val-d2"></span></li>
-          <li><span>Rowing Barre Strict — 4×8</span> <span class="weight-display">RPE 8</span></li>
-          <li><span>Planche lestée — 3x45s</span> <span class="weight-display">CORE</span></li>
+          <li><span>2 Rowing — 3×6-8</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>2 Biceps Curls — 2x6-10</span> <span class="weight-display">RPE 7</span></li>
         </ul>
       </div>
     </div>
 
     <div class="day">
-      <h2>Jour 3 — Bench & Squat Tech. <span>+</span></h2>
+      <h2>Jour 3 — Bench Focus & Shoulders Acc<span>+</span></h2>
       <div class="exercises">
         <ul>
-          <li><span>Bench Press (Pause) — 3×4</span> <span class="weight-display" id="val-b1"></span></li>
-          <li><span>Larsen Press — 3×8</span> <span class="weight-display" id="val-b2"></span></li>
-          <li><span>OHP (Overhead Press) — 3×8</span> <span class="weight-display">RPE 8</span></li>
-          <li><span>Élévations Latérales — 4×15</span> <span class="weight-display">RPE 9</span></li>
+          <li><span>Bench Press (Compétition) — 3×4</span> <span class="weight-display" id="val-b1"></span></li>
+          <li><span>Larsen Press Machine — 2×6-8</span> <span class="weight-display" id="val-b2"></span></li>
+          <li><span>OHP (Overhead Press) — 3×6-8</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Élévations Latérales — 3×8-10</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>2 Triceps — 2×6-10</span> <span class="weight-display">RPE 7</span></li>
         </ul>
       </div>
     </div>
 
     <div class="day">
-      <h2>Jour 4 — Deadlift Acc. & Hypertrophie <span>+</span></h2>
+      <h2>Jour 4 — DL Acc. & Hypertrophie <span>+</span></h2>
       <div class="exercises">
         <ul>
-          <li><span>Deadlift Jambes Tendues — 3×8</span> <span class="weight-display" id="val-da1"></span></li>
-          <li><span>Dips lestés — 3×10</span> <span class="weight-display">RPE 8</span></li>
-          <li><span>Pull-ups (Tractions) — 3×MAX</span> <span class="weight-display">BODY</span></li>
-          <li><span>Facepulls / Biceps — 3×15</span> <span class="weight-display">REHAB</span></li>
+          <li><span>Deadlift Variante — 3×8</span> <span class="weight-display" id="val-da1"></span></li>
+          <li><span>Leg Extension — 2×8-10</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Lat Pull-Down — 3×6-8</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Curls — 3×8-10</span> <span class="weight-display">RPE 7</span></li>
+          <li><span>Facepulls/Rear delt — 2×8-12</span> <span class="weight-display">RPE 7</span></li>
+          <li><span>Leg Curls — 2×8-10</span> <span class="weight-display">RPE 8</span></li>
         </ul>
       </div>
     </div>
@@ -231,12 +158,11 @@
     </div>
 
     <footer>
-      © 2026 — Road to 93kg Competition Prep
+      © 2026 — Road to 93kg National
     </footer>
-  </div>
+</div>
 
-  <script>
-    // Accordéon
+<script>
     document.querySelectorAll('.day').forEach(day => {
       day.addEventListener('click', () => {
         day.classList.toggle('open');
@@ -245,35 +171,33 @@
       });
     });
 
-    // Calculateur de charges
-    function round25(x) {
-      return Math.round(x / 2.5) * 2.5;
-    }
+    function round25(x) { return Math.round(x / 2.5) * 2.5; }
 
     function updateWeights() {
       const sMax = parseFloat(document.getElementById('maxSquat').value) || 0;
       const bMax = parseFloat(document.getElementById('maxBench').value) || 0;
       const dMax = parseFloat(document.getElementById('maxDeadlift').value) || 0;
-      const pct = parseFloat(document.getElementById('weekSelect').value);
+      const week = document.getElementById('weekSelect').value;
 
-      // J1
-      document.getElementById('val-s1').innerText = round25(sMax * pct) + " kg";
-      document.getElementById('val-s2').innerText = round25(bMax * 0.65) + " kg";
+      let pS, pB, pD;
 
-      // J2
-      document.getElementById('val-d1').innerText = round25(dMax * pct) + " kg";
+      switch(week) {
+        case "1": pS = 0.75; pB = 0.75; pD = 0.75; break;
+        case "2": pS = 0.80; pB = 0.80; pD = 0.85; break;
+        case "3": pS = 0.85; pB = 0.85; pD = 0.90; break;
+        case "4": pS = 0.60; pB = 0.60; pD = 0.60; break;
+      }
+
+      // Application des calculs
+      document.getElementById('val-s1').innerText = round25(sMax * pS) + " kg";
+      document.getElementById('val-d1').innerText = round25(dMax * pD) + " kg";
       document.getElementById('val-d2').innerText = round25(sMax * 0.60) + " kg";
-
-      // J3
-      document.getElementById('val-b1').innerText = round25(bMax * pct) + " kg";
+      document.getElementById('val-b1').innerText = round25(bMax * pB) + " kg";
       document.getElementById('val-b2').innerText = round25(bMax * 0.60) + " kg";
-
-      // J4
       document.getElementById('val-da1').innerText = round25(dMax * 0.55) + " kg";
     }
 
-    // Initialisation
     updateWeights();
-  </script>
+</script>
 </body>
 </html>

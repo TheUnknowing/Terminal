@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Programme SBD + OHP — Heavy Powerbuilding</title>
+  <title>Powerlifting Prep 93kg — Cycle 4 Semaines</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap');
 
@@ -11,22 +11,24 @@
       background: radial-gradient(circle at top, #0a0a0f, #020202);
       color: #c8f7c5;
       font-family: 'Orbitron', sans-serif;
-      padding: 40px;
+      padding: 20px;
       margin: 0;
       overflow-x: hidden;
     }
 
     h1 {
       text-align: center;
-      font-size: 2rem;
+      font-size: 1.8rem;
       text-shadow: 0 0 20px #00ff88;
       color: #9affc8;
+      margin-bottom: 5px;
     }
 
-    p {
+    .subtitle {
       text-align: center;
       color: #91ffa0;
-      margin-bottom: 40px;
+      font-size: 0.9rem;
+      margin-bottom: 25px;
     }
 
     .container {
@@ -34,25 +36,62 @@
       margin: 0 auto;
     }
 
+    /* Dashboard des Maxs */
+    .dashboard {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .input-group label {
+      font-size: 0.7rem;
+      color: #77ffcc;
+      margin-bottom: 5px;
+    }
+
+    .input-group input, .input-group select {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid #00ff88;
+      color: #fff;
+      padding: 8px;
+      border-radius: 5px;
+      font-family: 'Orbitron';
+      width: 80px;
+      text-align: center;
+    }
+
+    select { width: 120px !important; }
+
+    /* Style des Jours */
     .day {
       background: rgba(0, 255, 136, 0.05);
       border: 1px solid rgba(0, 255, 136, 0.2);
       border-radius: 12px;
-      margin-bottom: 20px;
-      padding: 20px;
+      margin-bottom: 15px;
+      padding: 15px;
       transition: all 0.3s ease;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
     }
 
     .day:hover {
       background: rgba(0, 255, 136, 0.1);
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
     }
 
     .day h2 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #77ffcc;
       margin: 0;
       display: flex;
@@ -61,23 +100,26 @@
     }
 
     .exercises {
-      margin-top: 10px;
+      margin-top: 15px;
       display: none;
       animation: fadeIn 0.4s ease;
     }
 
-    .exercises ul {
-      list-style: none;
-      padding-left: 0;
-    }
+    .open .exercises { display: block; }
+
+    .exercises ul { list-style: none; padding-left: 0; }
 
     .exercises li {
-      padding: 6px 0;
+      padding: 10px 0;
       border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
     }
 
-    .open .exercises {
-      display: block;
+    .weight-display {
+      color: #00ff88;
+      font-weight: 600;
     }
 
     @keyframes fadeIn {
@@ -86,108 +128,115 @@
     }
 
     .note {
-      margin-top: 40px;
+      margin-top: 30px;
       color: #c4ffc8;
       background: rgba(0, 255, 136, 0.05);
       border-left: 3px solid #00ff88;
-      padding: 20px;
+      padding: 15px;
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     footer {
-      margin-top: 40px;
+      margin-top: 30px;
       text-align: center;
-      color: #777;
-      font-size: 0.8rem;
+      color: #555;
+      font-size: 0.7rem;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>HEAVY POWERBUILDING — SBD + OHP</h1>
-    <p>5 jours / semaine • 2 séries de travail par exo • Intensité maximale</p>
+    <h1>PL PREP — ROAD TO 93KG</h1>
+    <p class="subtitle">4 Jours / Semaine • Cycle Linéaire • Peak Intensity</p>
 
-    <!-- Jour 1 -->
-    <div class="day">
-      <h2>Jour 1 — Bench Press & Triceps <span>+</span></h2>
+    <div class="dashboard">
+      <div class="input-group">
+        <label>SQUAT MAX</label>
+        <input type="number" id="maxSquat" value="170" oninput="updateWeights()">
+      </div>
+      <div class="input-group">
+        <label>BENCH MAX</label>
+        <input type="number" id="maxBench" value="140" oninput="updateWeights()">
+      </div>
+      <div class="input-group">
+        <label>DEADLIFT MAX</label>
+        <input type="number" id="maxDeadlift" value="210" oninput="updateWeights()">
+      </div>
+      <div class="input-group">
+        <label>PHASE</label>
+        <select id="weekSelect" onchange="updateWeights()">
+          <option value="0.75">S1 (75%)</option>
+          <option value="0.80">S2 (80%)</option>
+          <option value="0.85">S3 (85%)</option>
+          <option value="0.60">S4 (Deload)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="day open">
+      <h2>Jour 1 — Squat & Bench Acc. <span>−</span></h2>
       <div class="exercises">
         <ul>
-          <li>Bench Press — 2×4–6</li>
-          <li>Incline DB Press — 2×6–8</li>
-          <li>Dips lestés — 2×8</li>
-          <li>Overhead Rope Extension — 2×10–12</li>
+          <li><span>Squat (Compétition) — 3×5</span> <span class="weight-display" id="val-s1"></span></li>
+          <li><span>Close Grip Bench — 3×8</span> <span class="weight-display" id="val-s2"></span></li>
+          <li><span>Fentes Bulgares — 3×10</span> <span class="weight-display">RPE 7</span></li>
+          <li><span>Extensions Triceps — 3×12</span> <span class="weight-display">RPE 8</span></li>
         </ul>
       </div>
     </div>
 
-    <!-- Jour 2 -->
     <div class="day">
-      <h2>Jour 2 — Squat & Jambes <span>+</span></h2>
+      <h2>Jour 2 — Deadlift & Dos <span>+</span></h2>
       <div class="exercises">
         <ul>
-          <li>Back Squat — 2×4–6</li>
-          <li>Front Squat / Leg Press — 2×6–8</li>
-          <li>Leg Curl — 2×10–12</li>
-          <li>Mollets debout — 2×12–15</li>
+          <li><span>Deadlift (Compétition) — 3×3</span> <span class="weight-display" id="val-d1"></span></li>
+          <li><span>Pause Squat (2s) — 3×4</span> <span class="weight-display" id="val-d2"></span></li>
+          <li><span>Rowing Barre Strict — 4×8</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Planche lestée — 3x45s</span> <span class="weight-display">CORE</span></li>
         </ul>
       </div>
     </div>
 
-    <!-- Jour 3 -->
     <div class="day">
-      <h2>Jour 3 — Overhead Press & Biceps <span>+</span></h2>
+      <h2>Jour 3 — Bench & Squat Tech. <span>+</span></h2>
       <div class="exercises">
         <ul>
-          <li>Overhead Press assis (barre) — 2×4–6</li>
-          <li>Lateral Raises (strict) — 2×10–12</li>
-          <li>Barbell Curl — 2×6–8</li>
-          <li>Incline DB Curl — 2×8–10</li>
+          <li><span>Bench Press (Pause) — 3×4</span> <span class="weight-display" id="val-b1"></span></li>
+          <li><span>Larsen Press — 3×8</span> <span class="weight-display" id="val-b2"></span></li>
+          <li><span>OHP (Overhead Press) — 3×8</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Élévations Latérales — 4×15</span> <span class="weight-display">RPE 9</span></li>
         </ul>
       </div>
     </div>
 
-    <!-- Jour 4 -->
     <div class="day">
-      <h2>Jour 4 — Deadlift & Dos <span>+</span></h2>
+      <h2>Jour 4 — Deadlift Acc. & Hypertrophie <span>+</span></h2>
       <div class="exercises">
         <ul>
-          <li>Deadlift (conventional) — 2×3–5</li>
-          <li>Barbell Row (strict) — 2×6–8</li>
-          <li>Pull-ups lestés — 2×6–8</li>
-          <li>Facepull — 2×10–12</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Jour 5 -->
-    <div class="day">
-      <h2>Jour 5 — Pecs & Épaules <span>+</span></h2>
-      <div class="exercises">
-        <ul>
-          <li>Close Grip Bench Press — 2×5–6</li>
-          <li>Seated OHP haltères — 2×6–8</li>
-          <li>Chest Fly — 2×10–12</li>
-          <li>Lateral Raises unilatérales — 2×12–15</li>
+          <li><span>Deadlift Jambes Tendues — 3×8</span> <span class="weight-display" id="val-da1"></span></li>
+          <li><span>Dips lestés — 3×10</span> <span class="weight-display">RPE 8</span></li>
+          <li><span>Pull-ups (Tractions) — 3×MAX</span> <span class="weight-display">BODY</span></li>
+          <li><span>Facepulls / Biceps — 3×15</span> <span class="weight-display">REHAB</span></li>
         </ul>
       </div>
     </div>
 
     <div class="note">
-      <strong>Notes clés :</strong><br>
-      - Progression : +2.5 à 5 kg quand tu atteins la fourchette haute.<br>
-      - RPE cible : 9–9.5, proche de l’échec sans le dépasser.<br>
-      - Deload : toutes les 6–8 semaines (50–60% des charges).<br>
-      - Échauffe-toi toujours avec 1–2 séries légères avant le travail lourd.
+      <strong>Notes de programmation :</strong><br>
+      - Repos : 3 à 5 min sur les lifts principaux (SBD).<br>
+      - S1 à S3 : Augmentation du poids. S4 : Récupération active.<br>
+      - Si le RPE en S3 est < 8, augmente tes maxs de 2.5kg au cycle suivant.
     </div>
 
     <footer>
-      © 2025 — Programme conçu pour la performance naturelle en SBD + OHP
+      © 2026 — Road to 93kg Competition Prep
     </footer>
   </div>
 
   <script>
+    // Accordéon
     document.querySelectorAll('.day').forEach(day => {
       day.addEventListener('click', () => {
         day.classList.toggle('open');
@@ -195,6 +244,36 @@
         sign.textContent = day.classList.contains('open') ? '−' : '+';
       });
     });
+
+    // Calculateur de charges
+    function round25(x) {
+      return Math.round(x / 2.5) * 2.5;
+    }
+
+    function updateWeights() {
+      const sMax = parseFloat(document.getElementById('maxSquat').value) || 0;
+      const bMax = parseFloat(document.getElementById('maxBench').value) || 0;
+      const dMax = parseFloat(document.getElementById('maxDeadlift').value) || 0;
+      const pct = parseFloat(document.getElementById('weekSelect').value);
+
+      // J1
+      document.getElementById('val-s1').innerText = round25(sMax * pct) + " kg";
+      document.getElementById('val-s2').innerText = round25(bMax * 0.65) + " kg";
+
+      // J2
+      document.getElementById('val-d1').innerText = round25(dMax * pct) + " kg";
+      document.getElementById('val-d2').innerText = round25(sMax * 0.60) + " kg";
+
+      // J3
+      document.getElementById('val-b1').innerText = round25(bMax * pct) + " kg";
+      document.getElementById('val-b2').innerText = round25(bMax * 0.60) + " kg";
+
+      // J4
+      document.getElementById('val-da1').innerText = round25(dMax * 0.55) + " kg";
+    }
+
+    // Initialisation
+    updateWeights();
   </script>
 </body>
 </html>

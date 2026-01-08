@@ -8,28 +8,82 @@
     /* Style général pour le terminal */
 body {
   background-color: black;
-  color: #00FF00; /* Texte vert */
+  color: #00FF00;
   font-family: 'Courier New', monospace;
   font-size: 18px;
   margin: 0;
   padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Canvas pour les particules */
+#particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#particles-canvas.active {
+  opacity: 1;
 }
 
 .terminal {
   width: 1500px;
   max-width: 90%;
-  height: 600px; /* Hauteur fixe */
+  height: 600px;
   margin: 40px auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* Pour que #output et #command prennent toute la largeur */
+  align-items: stretch;
   border: 2px solid #00FF00;
   border-radius: 10px;
   box-shadow: 0 0 15px #00FF00;
   background-color: #000;
   color: #00FF00;
   font-family: 'Courier New', Courier, monospace;
+  position: relative;
+  z-index: 1;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Effet glitch */
+.glitch {
+  animation: glitch 0.3s ease;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+    filter: hue-rotate(90deg);
+  }
+  40% {
+    transform: translate(-5px, -5px);
+    filter: hue-rotate(180deg);
+  }
+  60% {
+    transform: translate(5px, 5px);
+    filter: hue-rotate(270deg);
+  }
+  80% {
+    transform: translate(5px, -5px);
+    filter: hue-rotate(360deg);
+  }
+  100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
 }
 
 #output {
@@ -38,14 +92,12 @@ body {
   max-width: 100%;
   max-height: 1000px;
   overflow-y: auto;
-
-  /* Cacher la scrollbar mais permettre le scroll */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #output::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
 pre {
@@ -77,18 +129,18 @@ pre {
   flex-grow: 1;
   padding: 0;
   margin: 0;
-  line-height: 1.5em; /* même line-height que prompt */
+  line-height: 1.5em;
 }
 
 #input-line {
   display: flex;
-  align-items: center; /* Aligne verticalement prompt et input */
-  gap: 8px; /* Espacement horizontal entre prompt et input */
+  align-items: center;
+  gap: 8px;
   width: 100%;
 }
 
 #input-line .prompt {
-  line-height: 1.5em; /* Pour matcher la hauteur de l'input */
+  line-height: 1.5em;
 }
 
 .cursor {
@@ -100,11 +152,13 @@ pre {
 }
 
 @keyframes blink {
-      50% { opacity: 0; }
-    }
+  50% { opacity: 0; }
+}
   </style>
 </head>
 <body>
+  <canvas id="particles-canvas"></canvas>
+  
   <div class="terminal">
     <pre id="output"></pre>
     <div id="input-line" style="display: none; width: 100%;">
@@ -117,24 +171,113 @@ pre {
     if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       window.location.href = "./mobile/index.html";
     }
+    
     document.addEventListener("DOMContentLoaded", () => {
       const output = document.getElementById("output");
       const commandInput = document.getElementById("command");
+      const terminal = document.querySelector(".terminal");
+      const canvas = document.getElementById("particles-canvas");
+      const ctx = canvas.getContext("2d");
 
       // Nom du repo GitHub Pages
-      const githubBaseURL = "https://theunknowing.github.io/Terminal"; // Remplace par ton vrai URL GitHub Pages
+      const githubBaseURL = "https://theunknowing.github.io/Terminal";
 
       // Variables d'état
       let currentDirectory = "Terminal"; 
       const files = ["cv.pdf"];
       const directories = ["contact", "gym", "profile"]; 
-      const commandsList = ["ls", "cd", "open", "clear", "help", "sudo", "exit"];
+      const commandsList = ["ls", "cd", "open", "clear", "help", "sudo", "exit", "whoami", "tree"];
       let rootMode = false;
       let awaitingSecretAnswer = false;
+      
+      // Historique des commandes
+      let commandHistory = [];
+      let historyIndex = -1;
+
+      // Particules
+      let particles = [];
+      let animationId = null;
+
+      // Setup canvas
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      // Classe Particule
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.vx = (Math.random() - 0.5) * 0.5;
+          this.vy = (Math.random() - 0.5) * 0.5;
+          this.size = Math.random() * 2 + 1;
+          this.life = Math.random() * 100 + 100;
+          this.maxLife = this.life;
+        }
+
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.life--;
+
+          if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+          if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+
+        draw() {
+          const alpha = this.life / this.maxLife;
+          ctx.fillStyle = `rgba(255, 0, 0, ${alpha * 0.6})`;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        isDead() {
+          return this.life <= 0;
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Ajouter de nouvelles particules
+        if (particles.length < 100) {
+          particles.push(new Particle());
+        }
+
+        // Mettre à jour et dessiner
+        particles = particles.filter(p => !p.isDead());
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+
+        animationId = requestAnimationFrame(animateParticles);
+      }
+
+      function startParticles() {
+        canvas.classList.add("active");
+        if (!animationId) {
+          animateParticles();
+        }
+      }
+
+      function stopParticles() {
+        canvas.classList.remove("active");
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = null;
+          particles = [];
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
 
       // Introduction avant le shell
       const introParts = [
-        { content: `[ xhd v1.5 booting... ]`, speed: 15 },
+        { content: `[ xhd v2.0 booting... ]`, speed: 15 },
         { content: `Initializing shell session... Please wait.`, speed: 15 },
         { content: `
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
@@ -152,9 +295,9 @@ pre {
  /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\   /\\_/\\
 ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o ) ( o.o )
  > ^ <   > ^ <   > ^ <   > ^ <   > ^ <   > ^ < \n`,
-          speed: 0.1  // plus rapide ici
+          speed: 1
         },
-        { content: `Welcome to xhd’s terminal.`, speed: 15 },
+        { content: `Welcome to xhd's terminal.`, speed: 15 },
         { content: `Type 'help' to display available commands.\nHope you are familiar with linux terminals :D`, speed: 15 }
       ];
       
@@ -176,7 +319,7 @@ pre {
             setTimeout(typeWriterPart, 500);
           } else {
             introDone = true;
-            document.getElementById("input-line").style.display = "flex"; // 👈 Affiche la ligne de commande
+            document.getElementById("input-line").style.display = "flex";
             commandInput.disabled = false;
             commandInput.focus();
             setTimeout(() => {
@@ -210,7 +353,6 @@ pre {
         cd: (args) => {
           if (!args[0]) return "Specify a directory.";
       
-          // Accès au dossier secret uniquement en mode root
           if (args[0] === "secret" && rootMode) {
             output.innerHTML += `<span class="output">Wanna see my secret?</span><br>`;
             setTimeout(() => {
@@ -233,13 +375,38 @@ pre {
           output.innerHTML = "";
           return "";
         },
+        whoami: () => {
+          return rootMode ? "root" : "guest";
+        },
+        tree: () => {
+          let tree = "Terminal/\n";
+          const allDirs = [...directories];
+          if (rootMode) allDirs.push("secret");
+          
+          allDirs.forEach((dir, i) => {
+            const isLast = i === allDirs.length - 1 && files.length === 0;
+            tree += `${isLast ? '└──' : '├──'} ${dir}/\n`;
+          });
+          
+          files.forEach((file, i) => {
+            const isLast = i === files.length - 1;
+            tree += `${isLast ? '└──' : '├──'} ${file}\n`;
+          });
+          
+          return tree;
+        },
         exit: () => {
           if (!rootMode) return "You are not root.";
+          
+          // Effet glitch
+          terminal.classList.add("glitch");
+          setTimeout(() => terminal.classList.remove("glitch"), 300);
+          
           rootMode = false;
+          stopParticles();
 
-          // Changement de style en mode root
-          document.querySelector(".terminal").style.border = "2px solid green";
-          document.querySelector(".terminal").style.boxShadow = "0 0 15px green";
+          terminal.style.border = "2px solid green";
+          terminal.style.boxShadow = "0 0 15px green";
           document.body.style.backgroundColor = "#000000";
           document.getElementById("baseprompt").textContent = "Terminal@guest:~# ";
         
@@ -252,6 +419,8 @@ pre {
 <span class="output">cd <i>directory</i></span> - Change directory. Example: 'cd projects'.<br>
 <span class="output">open <i>file</i></span> - Opens a file. Example: 'open cv.pdf'.<br>
 <span class="output">clear</span> - Clears the terminal screen.<br>
+<span class="output">whoami</span> - Displays current user.<br>
+<span class="output">tree</span> - Displays directory tree.<br>
 <span class="output">help</span> - Displays the list of commands.<br>
 <span class="output">su...</span> - Nevermind haha...<br>`;
         }
@@ -259,15 +428,41 @@ pre {
 
       // Gestion des commandes
       commandInput.addEventListener("keydown", (e) => {
-        if (!introDone) return; // Bloque tant que l'intro n'est pas terminée
-        if (e.key === "Enter") {
+        if (!introDone) return;
+        
+        // Historique avec flèches
+        if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (commandHistory.length > 0) {
+            if (historyIndex === -1) {
+              historyIndex = commandHistory.length - 1;
+            } else if (historyIndex > 0) {
+              historyIndex--;
+            }
+            commandInput.value = commandHistory[historyIndex];
+          }
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          if (historyIndex !== -1) {
+            if (historyIndex < commandHistory.length - 1) {
+              historyIndex++;
+              commandInput.value = commandHistory[historyIndex];
+            } else {
+              historyIndex = -1;
+              commandInput.value = "";
+            }
+          }
+        } else if (e.key === "Enter") {
           const command = commandInput.value.trim();
+          if (command) {
+            commandHistory.push(command);
+            historyIndex = -1;
+          }
           commandInput.value = "";
-          const p = rootMode ? "Terminal@root:~#" : "Terminal@guest:~#";
+          const p = rootMode ? "Terminal@root:~# ☠" : "Terminal@guest:~#";
           output.innerHTML += `<span class="prompt">${p} </span><span class="command">${command}</span><br>`;
           executeCommand(command);
-        }
-        if (e.key === "Tab") {
+        } else if (e.key === "Tab") {
           e.preventDefault();
           autocomplete(commandInput);
         }
@@ -280,16 +475,19 @@ pre {
         if (awaitingSecretAnswer) {
           const answer = command.toLowerCase();
           if (answer === "cat") {
+            // Effet glitch
+            terminal.classList.add("glitch");
+            setTimeout(() => terminal.classList.remove("glitch"), 300);
+            
             rootMode = true;
             awaitingSecretAnswer = false;
+            startParticles();
           
-            // Changement de style en mode root
-            document.querySelector(".terminal").style.border = "2px solid red";
-            document.querySelector(".terminal").style.boxShadow = "0 0 15px red";
+            terminal.style.border = "2px solid red";
+            terminal.style.boxShadow = "0 0 15px red";
             document.body.style.backgroundColor = "#200";
           
-            // Changer le prompt dans l'input-line
-            document.getElementById("baseprompt").textContent = "Terminal@root:~# ";
+            document.getElementById("baseprompt").textContent = "Terminal@root:~# ☠ ";
           
             output.innerHTML += `<span class="output">[ Root mode activated ]</span><br><br>`;
           } else {
@@ -297,8 +495,8 @@ pre {
             output.innerHTML += `<span class="output">[ Access denied ]</span><br><br>`;
           }
           setTimeout(() => {
-          output.scrollTop = output.scrollHeight;
-        }, 50);
+            output.scrollTop = output.scrollHeight;
+          }, 50);
           return;
         }
       
@@ -309,23 +507,23 @@ pre {
 I walk around with silent grace,
 I rule your home, I own your space.
 I look at you with calm disdain,
-Yet cry for food like I’m in pain.
+Yet cry for food like I'm in pain.
 
 I scream at night, it so much fun,
 Then sleep all day beneath the sun.
 I stare at walls, I scratch your chair,
 And leave you fur just everywhere.
 
-I zoom around like I’m possessed,
+I zoom around like I'm possessed,
 Then take a nap right on your chest.
-You bought me toys? That’s pretty sweet.
-But cardboard boxes can’t be beat.
+You bought me toys? That's pretty sweet.
+But cardboard boxes can't be beat.
 
 Who am i?
 </span><br>`;
           setTimeout(() => {
-          output.scrollTop = output.scrollHeight;
-        }, 50);
+            output.scrollTop = output.scrollHeight;
+          }, 50);
           return;
         }
       
@@ -349,7 +547,6 @@ Who am i?
         const cmd = parts[0];
         const arg = parts[1] || "";
       
-        // Si on n'a tapé qu'une commande
         if (parts.length === 1) {
           const suggestions = commandsList.filter(c => c.startsWith(cmd));
           if (suggestions.length === 1) {
@@ -357,10 +554,7 @@ Who am i?
           } else if (suggestions.length > 1) {
             output.innerHTML += `<span class="output">${suggestions.join("  ")}</span><br><br>`;
           }
-        }
-      
-        // Si la commande est connue et on complète un argument
-        else if (commandsList.includes(cmd)) {
+        } else if (commandsList.includes(cmd)) {
           const suggestions = [...directories, ...files].filter(item => item.startsWith(arg));
           if (suggestions.length === 1) {
             input.value = cmd + " " + suggestions[0] + " ";

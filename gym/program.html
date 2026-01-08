@@ -102,7 +102,7 @@
       <h2>Jour 1 — Squat Focus + Bench Acc <span>−</span></h2>
       <div class="exercises">
         <ul>
-          <li><span>Squat (Compétition) — 3×5</span> <span class="weight-display" id="val-s1"></span></li>
+          <li><span>Squat (Compétition) — <span class="reps-display" id="reps-s1">3x5</span></span> <span class="weight-display" id="val-s1"></span></li>
           <li><span>Incline Bench — 2×6-8</span> <span class="weight-display">RPE 8</span></li>
           <li><span>Leg Press — 3×6-10</span> <span class="weight-display">RPE 7</span></li>
           <li><span>2 Triceps — 2×8-10</span> <span class="weight-display">RPE 7</span></li>
@@ -115,7 +115,7 @@
       <h2>Jour 2 — Deadlift Focus + Squat Acc <span>+</span></h2>
       <div class="exercises">
         <ul>
-          <li><span>Deadlift (Compétition) — 3×3</span> <span class="weight-display" id="val-d1"></span></li>
+          <li><span>Deadlift (Compétition) — <span class="reps-display" id="reps-d1">3x4</span></span> <span class="weight-display" id="val-d1"></span></li>
           <li><span>Pause Squat (2s) — 3×4</span> <span class="weight-display" id="val-d2"></span></li>
           <li><span>2 Rowing — 3×6-8</span> <span class="weight-display">RPE 8</span></li>
           <li><span>2 Biceps Curls — 2x6-10</span> <span class="weight-display">RPE 7</span></li>
@@ -124,10 +124,10 @@
     </div>
 
     <div class="day">
-      <h2>Jour 3 — Bench Focus & Shoulders Acc<span>+</span></h2>
+      <h2>Jour 3 — Bench Focus & Shoulders Acc <span>+</span></h2>
       <div class="exercises">
         <ul>
-          <li><span>Bench Press (Compétition) — 3×4</span> <span class="weight-display" id="val-b1"></span></li>
+          <li><span>Bench (Compétition) — <span class="reps-display" id="reps-b1">3x6</span></span> <span class="weight-display" id="val-b1"></span></li>
           <li><span>Larsen Press Machine — 2×6-8</span> <span class="weight-display" id="val-b2"></span></li>
           <li><span>OHP (Overhead Press) — 3×6-8</span> <span class="weight-display">RPE 8</span></li>
           <li><span>Élévations Latérales — 3×8-10</span> <span class="weight-display">RPE 8</span></li>
@@ -164,10 +164,11 @@
 
 <script>
     document.querySelectorAll('.day').forEach(day => {
-      day.addEventListener('click', () => {
+      day.addEventListener('click', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
         day.classList.toggle('open');
         const sign = day.querySelector('span');
-        sign.textContent = day.classList.contains('open') ? '−' : '+';
+        if (sign) sign.textContent = day.classList.contains('open') ? '−' : '+';
       });
     });
 
@@ -180,21 +181,39 @@
       const week = document.getElementById('weekSelect').value;
 
       let pS, pB, pD;
+      let rS, rB, rD;
 
       switch(week) {
-        case "1": pS = 0.75; pB = 0.75; pD = 0.75; break;
-        case "2": pS = 0.80; pB = 0.80; pD = 0.85; break;
-        case "3": pS = 0.85; pB = 0.85; pD = 0.90; break;
-        case "4": pS = 0.60; pB = 0.60; pD = 0.60; break;
+        case "1": 
+          pS = 0.75; pB = 0.75; pD = 0.75;
+          rS = "3x5"; rB = "3x6"; rD = "3x4";
+          break;
+        case "2": 
+          pS = 0.80; pB = 0.80; pD = 0.85;
+          rS = "3x5"; rB = "3x5"; rD = "3x3";
+          break;
+        case "3": 
+          pS = 0.85; pB = 0.85; pD = 0.90;
+          rS = "3x4"; rB = "3x4"; rD = "3x2";
+          break;
+        case "4": 
+          pS = 0.60; pB = 0.60; pD = 0.60;
+          rS = "3x6"; rB = "3x6"; rD = "3x5";
+          break;
       }
 
-      // Application des calculs
+      // Update Weights
       document.getElementById('val-s1').innerText = round25(sMax * pS) + " kg";
       document.getElementById('val-d1').innerText = round25(dMax * pD) + " kg";
       document.getElementById('val-d2').innerText = round25(sMax * 0.60) + " kg";
       document.getElementById('val-b1').innerText = round25(bMax * pB) + " kg";
       document.getElementById('val-b2').innerText = round25(bMax * 0.60) + " kg";
       document.getElementById('val-da1').innerText = round25(dMax * 0.55) + " kg";
+
+      // Update Reps text
+      document.getElementById('reps-s1').innerText = rS;
+      document.getElementById('reps-b1').innerText = rB;
+      document.getElementById('reps-d1').innerText = rD;
     }
 
     updateWeights();

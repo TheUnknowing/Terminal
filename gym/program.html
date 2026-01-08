@@ -3,306 +3,198 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Training Program</title>
+  <title>Programme SBD + OHP — Heavy Powerbuilding</title>
   <style>
-    /* Reset de base */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap');
 
     body {
-      font-family: "Courier New", monospace;
-      background: #0a0a0a;
-      color: #fff;
-      padding-top: 100px;
-      transition: background 0.3s;
-    }
-
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: #111;
-      border-bottom: 2px solid #fff;
-      padding: 15px 20px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    html {
-      scroll-padding-top: 100px; /* pour que les titres ne soient pas cachés par le header */
+      background: radial-gradient(circle at top, #0a0a0f, #020202);
+      color: #c8f7c5;
+      font-family: 'Orbitron', sans-serif;
+      padding: 40px;
+      margin: 0;
+      overflow-x: hidden;
     }
 
     h1 {
-      font-size: 2em;
-      color: #fff;
-      text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
-      margin-bottom: 15px;
       text-align: center;
+      font-size: 2rem;
+      text-shadow: 0 0 20px #00ff88;
+      color: #9affc8;
     }
 
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
+    p {
+      text-align: center;
+      color: #91ffa0;
+      margin-bottom: 40px;
     }
 
-    nav button {
-      padding: 10px 20px;
-      border: 2px solid;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1em;
-      cursor: pointer;
-      background: transparent;
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .day {
+      background: rgba(0, 255, 136, 0.05);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      padding: 20px;
       transition: all 0.3s ease;
-      text-shadow: 0 0 5px rgba(255,255,255,0.5);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
     }
 
-    nav button:hover {
-      color: #111;
-      text-shadow: 0 0 15px currentColor, 0 0 30px currentColor;
-      box-shadow: 0 0 20px currentColor, 0 0 40px currentColor inset;
+    .day:hover {
+      background: rgba(0, 255, 136, 0.1);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+      transform: translateY(-2px);
     }
 
-    /* Couleurs par jour */
-    #btn-squat { color: #cc0606; border-color: #cc0606; }
-    #btn-bench { color: #00ffff; border-color: #00ffff; }
-    #btn-ohp { color: #fffa00; border-color: #fffa00; }
-    #btn-deadlift { color: #ff6f00; border-color: #ff6f00; }
-    #btn-pullup { color: #00ff00; border-color: #00ff00; }
-    #btn-dips { color: #9900ff; border-color: #9900ff; }
-    #btn-diagram { color: #ffffff; border-color: #ffffff; }
-
-    main {
-      max-width: 1000px;
-      margin: auto;
-      padding: 0 20px;
+    .day h2 {
+      font-size: 1.2rem;
+      color: #77ffcc;
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 30px 0;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
-      animation: fadeIn 0.5s ease-in-out;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-
-    th, td {
-      padding: 12px 15px;
-      text-align: center;
-      font-size: 1em;
-    }
-
-    th {
-      background: rgba(255,255,255,0.1);
-      color: inherit;
-      text-shadow: 0 0 5px currentColor;
-    }
-
-    tr:nth-child(even) {
-      background: rgba(255,255,255,0.05);
-    }
-
-    tr:hover {
-      background: rgba(255,255,255,0.15);
-      transition: 0.3s;
-    }
-
-    .sheet {
+    .exercises {
+      margin-top: 10px;
       display: none;
-      padding-top: 80px; /* Espace pour le header fixe */
+      animation: fadeIn 0.4s ease;
     }
 
-    .sheet h2 {
-      margin-top: 0;
-      margin-bottom: 20px; /* Espace entre le titre et le contenu */
-      text-align: center;
+    .exercises ul {
+      list-style: none;
+      padding-left: 0;
     }
 
-    .active {
+    .exercises li {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .open .exercises {
       display: block;
     }
 
-    h2 {
-      margin-bottom: 15px;
-      font-size: 1.5em;
-      text-align: center;
-      text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
-    }
-
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(-5px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* --------- MOBILE (GSM) --------- */
-    @media (max-width: 600px) {
-      body {
-        padding-top: 120px;
-      }
-
-      h1 {
-        font-size: 1.5em;
-      }
-
-      nav button {
-        padding: 8px 12px;
-        font-size: 0.9em;
-      }
-
-      th, td {
-        padding: 8px 10px;
-        font-size: 0.85em;
-      }
-
-      h2 {
-        font-size: 1.2em;
-      }
-
-      main {
-        padding: 0 10px;
-      }
+    .note {
+      margin-top: 40px;
+      color: #c4ffc8;
+      background: rgba(0, 255, 136, 0.05);
+      border-left: 3px solid #00ff88;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
     }
 
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #777;
+      font-size: 0.8rem;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Programme d’entraînement</h1>
-    <nav>
-      <button id="btn-squat" onclick="showSheet('squat')">Squat</button>
-      <button id="btn-bench" onclick="showSheet('bench')">Bench</button>
-      <button id="btn-ohp" onclick="showSheet('ohp')">Overhead Press</button>
-      <button id="btn-deadlift" onclick="showSheet('deadlift')">Deadlift</button>
-      <button id="btn-pullup" onclick="showSheet('pullup')">Pull-up</button>
-      <button id="btn-dips" onclick="showSheet('dips')">Dips</button>
-      <button id="btn-diagram" onclick="showSheet('diagram')">Diagram</button>
-    </nav>
-  </header>
 
-  <main>
-    <div id="squat" class="sheet"></div>
-    <div id="bench" class="sheet"></div>
-    <div id="ohp" class="sheet"></div>
-    <div id="deadlift" class="sheet"></div>
-    <div id="pullup" class="sheet"></div>
-    <div id="dips" class="sheet"></div>
-    <div id="diagram" class="sheet" style="padding:20px;">
-      <h2> </h2>
-      <canvas id="muscleChart" width="650" height="650"
-        style="display:block; margin:20px auto; background:rgba(255,255,255,0.05); 
-               border-radius:15px; box-shadow:0 0 20px #000 inset;">
-      </canvas>
+  <div class="container">
+    <h1>HEAVY POWERBUILDING — SBD + OHP</h1>
+    <p>5 jours / semaine • 2 séries de travail par exo • Intensité maximale</p>
+
+    <!-- Jour 1 -->
+    <div class="day">
+      <h2>Jour 1 — Bench Press & Triceps <span>+</span></h2>
+      <div class="exercises">
+        <ul>
+          <li>Bench Press — 2×4–6</li>
+          <li>Incline DB Press — 2×6–8</li>
+          <li>Dips lestés — 2×8</li>
+          <li>Overhead Rope Extension — 2×10–12</li>
+        </ul>
+      </div>
     </div>
-  </main>
+
+    <!-- Jour 2 -->
+    <div class="day">
+      <h2>Jour 2 — Squat & Jambes <span>+</span></h2>
+      <div class="exercises">
+        <ul>
+          <li>Back Squat — 2×4–6</li>
+          <li>Front Squat / Leg Press — 2×6–8</li>
+          <li>Leg Curl — 2×10–12</li>
+          <li>Mollets debout — 2×12–15</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Jour 3 -->
+    <div class="day">
+      <h2>Jour 3 — Overhead Press & Biceps <span>+</span></h2>
+      <div class="exercises">
+        <ul>
+          <li>Overhead Press assis (barre) — 2×4–6</li>
+          <li>Lateral Raises (strict) — 2×10–12</li>
+          <li>Barbell Curl — 2×6–8</li>
+          <li>Incline DB Curl — 2×8–10</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Jour 4 -->
+    <div class="day">
+      <h2>Jour 4 — Deadlift & Dos <span>+</span></h2>
+      <div class="exercises">
+        <ul>
+          <li>Deadlift (conventional) — 2×3–5</li>
+          <li>Barbell Row (strict) — 2×6–8</li>
+          <li>Pull-ups lestés — 2×6–8</li>
+          <li>Facepull — 2×10–12</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Jour 5 -->
+    <div class="day">
+      <h2>Jour 5 — Pecs & Épaules <span>+</span></h2>
+      <div class="exercises">
+        <ul>
+          <li>Close Grip Bench Press — 2×5–6</li>
+          <li>Seated OHP haltères — 2×6–8</li>
+          <li>Chest Fly — 2×10–12</li>
+          <li>Lateral Raises unilatérales — 2×12–15</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Notes clés :</strong><br>
+      - Progression : +2.5 à 5 kg quand tu atteins la fourchette haute.<br>
+      - RPE cible : 9–9.5, proche de l’échec sans le dépasser.<br>
+      - Deload : toutes les 6–8 semaines (50–60% des charges).<br>
+      - Échauffe-toi toujours avec 1–2 séries légères avant le travail lourd.
+    </div>
+
+    <footer>
+      © 2025 — Programme conçu pour la performance naturelle en SBD + OHP
+    </footer>
+  </div>
 
   <script>
-    async function loadSheet(sheetUrl, elementId, title, color) {
-      const res = await fetch(sheetUrl);
-      const text = await res.text();
-      const rows = text.split("\n").map(r => r.split(","));
-
-      let html = `<h2 style="color:${color}">${title}</h2><table>`;
-      rows.forEach((row, i) => {
-        html += "<tr>";
-        row.forEach(cell => {
-          html += i === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
-        });
-        html += "</tr>";
+    document.querySelectorAll('.day').forEach(day => {
+      day.addEventListener('click', () => {
+        day.classList.toggle('open');
+        const sign = day.querySelector('span');
+        sign.textContent = day.classList.contains('open') ? '−' : '+';
       });
-      html += "</table>";
-      document.getElementById(elementId).innerHTML = html;
-    }
-
-    function showSheet(id) {
-      document.querySelectorAll(".sheet").forEach(div => div.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
-
-    // Chargement des feuilles CSV
-    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1760366903", "squat", "Squat — Leg Day", "#cc0606");
-    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1561937788", "bench", "Bench — Chest/Triceps", "#00ffff");
-    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=878510155", "ohp", "Overhead Press — Shoulders/Biceps", "#fffa00");
-    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=2035311765", "deadlift", "Deadlift — Injury Day", "#ff6f00");
-    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=920457478", "pullup", "Pull-up — Back/Biceps", "#00ff00");
-    loadSheet("https://docs.google.com/spreadsheets/d/e/2PACX-1vSG2ib53lDkYwBOkeQ5-MBmWV72KNk1JQctxvEI2S1QstTWn7GU7MMGH0Ll9yhLKLwdtZ8AJerV9nop/pub?output=csv&gid=1784731766", "dips", "Dips — Chest/Shoulders/Triceps", "#9900ff");
-
-    showSheet("squat");
-
-    
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const ctx = document.getElementById('muscleChart').getContext('2d');
-    const chart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Chest', 'Back', 'Biceps', 'Triceps', 'Leg', 'Shoulders', 'Forearm'],
-        datasets: [{
-          label: 'Muscles Worked',
-          data: [17, 14, 12, 17, 16, 14, 10],
-          backgroundColor: [
-            '#00ffff', // Chest
-            '#00ff00', // Back
-            '#ff6f00', // Biceps
-            '#9900ff', // Triceps
-            '#cc0606', // Leg
-            '#fffa00', // Shoulders
-            '#191970'  // Forearm
-          ],
-          borderColor: '#0a0a0a',
-          borderWidth: 3,
-          hoverOffset: 15
-        }]
-      },
-      options: {
-        responsive: false,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              color: '#fff',
-              font: { size: 14 },
-              usePointStyle: true,
-              pointStyle: 'circle'
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return context.label + ': ' + context.parsed + '%';
-              }
-            },
-            bodyColor: '#000',
-            backgroundColor: '#fff',
-            titleColor: '#000'
-          },
-          title: {
-            display: false
-          }
-        },
-        animation: {
-          animateScale: true,
-          animateRotate: true
-        }
-      }
     });
-  
-    function showSheet(id) {
-      document.querySelectorAll(".sheet").forEach(div => div.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      if(id === 'diagram') chart.update();
-    }
   </script>
 </body>
 </html>

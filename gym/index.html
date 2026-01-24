@@ -167,6 +167,37 @@
       box-shadow: 0 0 8px #00ff00;
       transition: width 1.2s ease-out;
     }
+    #prTotal {
+      box-shadow: 0 0 18px #00ff00;
+      background: rgba(0, 255, 0, 0.15);
+    }
+    #chartToggles {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    #chartToggles button {
+      background: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-family: 'Orbitron', monospace;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00ff00;
+      transition: all 0.2s ease;
+    }
+    
+    #chartToggles button:hover {
+      background: #00ff00;
+      color: black;
+    }
+    
+    #chartToggles button.inactive {
+      opacity: 0.35;
+      box-shadow: none;
+    }
     
   </style>
 </head>
@@ -182,7 +213,7 @@
   </div>
 
   <div class="section" id="prSection">
-    <h2>PRs</h2>
+    <h2>SBD</h2>
   
     <div class="pr-lift" id="prSquat">
       <div class="pr-header">
@@ -216,18 +247,34 @@
         <div class="progress-bar"></div>
       </div>
     </div>
+
+    <div class="pr-lift" id="prTotal">
+      <div class="pr-header">
+        <span class="title">🔥 Total SBD</span>
+        <span class="pr-value">-- kg</span>
+        <span class="progress">--%</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+
   </div>
   
   <div class="section">
     <h2>Progression</h2>
-    <div class="lift-title"><span class="icon">🦵</span><h3>Squat</h3></div>
-    <canvas id="squatChart" width="400" height="200"></canvas>
+    <div class="lift-title">
+      <span class="icon">📈</span><h3>SBD & Total Progression</h3>
+    </div>
+    
+    <div id="chartToggles" style="margin-bottom: 15px;">
+      <button data-dataset="0">Squat</button>
+      <button data-dataset="1">Bench</button>
+      <button data-dataset="2">Deadlift</button>
+      <button data-dataset="3" class="active">Total</button>
+    </div>
 
-    <div class="lift-title"><span class="icon">🏅</span><h3>Bench Press</h3></div>
-    <canvas id="benchChart" width="400" height="200"></canvas>
-
-    <div class="lift-title"><span class="icon">💀</span><h3>Deadlift</h3></div>
-    <canvas id="deadliftChart" width="400" height="200"></canvas>
+    <canvas id="sbdChart" width="400" height="200"></canvas>
   </div>
 
   <div class="section">
@@ -236,14 +283,14 @@
   </div>
 
   <div class="section">
-    <h2>Goals</h2>
+    <h2 id="goalsTitle"></h2>
     <ul>
-      <li>Squat : 180 kg</li>
-      <li>Bench : 140 kg</li>
-      <li>Deadlift : 220 kg</li>
+      <li>Squat : 220 kg</li>
+      <li>Bench : 160 kg</li>
+      <li>Deadlift : 260 kg</li>
       <li>Overhead Press : 100 kg</li>
       <li>Strict Curl : 60 kg</li>
-      <li>Weight : 90 kg</li>
+      <li>Weight : 93 kg</li>
       <li>Bodyfat : 10-12%</li>
     </ul>
   </div>
@@ -252,13 +299,13 @@
     <h2>Youtube</h2>
     <ul class="video-list">
       <li><a href="https://youtu.be/dmejud81-t0" target="_blank">When cat</a></li>
-      <li><a href="https://youtu.be/r4ye2n0Jt68" target="_blank">SBD 2025</a></li>
+      <li><a href="https://youtu.be/r4ye2n0Jt68" target="_blank">SBD June 2025</a></li>
     </ul>
   </div>
 
   <div class="section" id="programSection">
     <h2>Program</h2>
-    <p>Check out my powerlifting program (showing only the progression for the main compound lifts, not the accessory exercises)</p>
+    <p>Check out my powerlifting program (adaptable to your PRs)</p>
     <a href="program.html">
       <button style="
         background-color: #00ff00;
@@ -278,7 +325,7 @@
   </div>
 
   <footer>
-    <p>© 2025 - Personal page of Mahi Chahid</p>
+    <p id="footerYear"></p>
   </footer>
 
   <script>
@@ -359,47 +406,78 @@
     const benchData = [60, 85, 110, 140];
     const deadliftData = [90, 130, 160, 210];
     const labels = ['2022', '2023', '2024', '2025'];
+    const totalData = squatData.map((_, i) =>
+      squatData[i] + benchData[i] + deadliftData[i]
+    );
 
-    function createChart(canvasId, data, label, color) {
-      new Chart(document.getElementById(canvasId), {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: label,
-            data: data,
-            fill: true,
-            backgroundColor: color + '33',
-            borderColor: color,
+
+    const sbdChart = new Chart(document.getElementById('sbdChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Squat (kg)',
+            data: squatData,
+            borderColor: '#ff6384',
+            backgroundColor: '#ff638433',
             tension: 0.3
-          }]
-        },
-        options: {
-          animation: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { color: "#0f0" },
-              grid: { color: "#003300" }
-            },
-            x: {
-              ticks: { color: "#0f0" },
-              grid: { color: "#003300" }
-            }
           },
-          plugins: {
-            legend: {
-              labels: { color: '#0f0' }
-            }
+          {
+            label: 'Bench Press (kg)',
+            data: benchData,
+            borderColor: '#36a2eb',
+            backgroundColor: '#36a2eb33',
+            tension: 0.3
+          },
+          {
+            label: 'Deadlift (kg)',
+            data: deadliftData,
+            borderColor: '#cc65fe',
+            backgroundColor: '#cc65fe33',
+            tension: 0.3
+          },
+          {
+            label: '🔥 Total SBD (kg)',
+            data: totalData,
+            borderColor: '#00ff00',
+            backgroundColor: '#00ff0033',
+            borderWidth: 3,
+            tension: 0.25
+          }
+        ]
+      },
+      options: {
+        animation: false,
+        plugins: {
+          legend: { display: false } // 👈 on cache la légende native
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { color: "#0f0" },
+            grid: { color: "#003300" }
+          },
+          x: {
+            ticks: { color: "#0f0" },
+            grid: { color: "#003300" }
           }
         }
+      }
+    });
+
+    document.querySelectorAll('#chartToggles button').forEach(button => {
+      button.addEventListener('click', () => {
+        const index = button.dataset.dataset;
+        const dataset = sbdChart.data.datasets[index];
+    
+        dataset.hidden = !dataset.hidden;
+        button.classList.toggle('inactive');
+    
+        sbdChart.update();
       });
-    }
-
-    createChart('squatChart', squatData, 'Squat PR (kg)', '#ff6384');
-    createChart('benchChart', benchData, 'Bench PR (kg)', '#36a2eb');
-    createChart('deadliftChart', deadliftData, 'Deadlift PR (kg)', '#cc65fe');
-
+    });
+    
     // DOTS
     const bodyWeight = 90;
     const totalLift = squatData.at(-1) + benchData.at(-1) + deadliftData.at(-1);
@@ -459,15 +537,29 @@
         progressBar.style.width = progressPercent + "%";
       }, 50);
     }
-  
+
+    // Dynamic current year
+    const currentYear = new Date().getFullYear();
+    
+    // Goals title
+    document.getElementById('goalsTitle').textContent =
+      `${currentYear} Goals`;
+    
+    // Footer
+    document.getElementById('footerYear').textContent =
+      `© ${currentYear} - Personal page of Mahi Chahid`;
+
     // Exemple de valeurs (à remplacer par tes variables)
     const squatPR = 170;
-    const squatGoal = 180;
+    const squatGoal = 220;
     const benchPR = 140;
-    const benchGoal = 140;
+    const benchGoal = 160;
     const deadliftPR = 210;
-    const deadliftGoal = 220;
-  
+    const deadliftGoal = 260;
+    const totalPR = squatPR + benchPR + deadliftPR;
+    const totalGoal = squatGoal + benchGoal + deadliftGoal;
+    
+    setPRProgress("prTotal", totalPR, totalGoal);
     setPRProgress("prSquat", squatPR, squatGoal);
     setPRProgress("prBench", benchPR, benchGoal);
     setPRProgress("prDeadlift", deadliftPR, deadliftGoal);

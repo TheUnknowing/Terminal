@@ -24,10 +24,6 @@
       box-shadow: 0 0 15px #00FF00;
     }
 
-    pre {
-      margin: 10px 0;
-    }
-
     .prompt {
       font-weight: bold;
     }
@@ -35,27 +31,49 @@
     a {
       color: #00FF00;
       text-decoration: underline;
+      cursor: pointer;
+    }
+
+    pre {
+      margin: 10px 0;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: #00FF00;
+      animation: blink 0.8s infinite;
+      vertical-align: bottom;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
     }
   </style>
 </head>
 <body>
+
   <div class="terminal">
-    <p><span class="prompt">Terminal@guest:~#</span> whereami</p>
-    <p>bash: whereami: idk</p>
+    <div id="output">
+      <p><span class="prompt">Terminal@guest:~#</span> cd /unknown/path</p>
+      <p>bash: cd: /unknown/path: No such file or directory</p>
 
-    <p><span class="prompt">Terminal@guest:~#</span> status</p>
-    <p>Error 404: Page not found.</p>
+      <p><span class="prompt">Terminal@guest:~#</span> status</p>
+      <p>Error 404: Page not found.</p>
 
-    <p><span class="prompt">Terminal@guest:~#</span> help</p>
-    <p>
-      Available actions:<br>
-      - <a href="/Terminal/">return to home</a><br>
-      - rethink your life choices
-      - pet cat
-    </p>
+      <p><span class="prompt">Terminal@guest:~#</span> help</p>
+      <p>
+        Available actions:<br>
+        - <a href="/Terminal/">return to home</a><br>
+        - rethink your life choices
+        - pet cat
+      </p>
 
-    <p><span class="prompt">Terminal@guest:~#</span> <span class="cursor"></span></p>
+      <p><span class="prompt">Terminal@guest:~#</span> <span class="cursor"></span></p>
+    </div>
   </div>
+
   <script>
     let petCount = 0;
     const output = document.getElementById("output");
@@ -91,5 +109,6 @@
       }
     });
   </script>
+
 </body>
 </html>

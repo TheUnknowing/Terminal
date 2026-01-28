@@ -1,2 +1,68 @@
-> command not found
-> exit 127
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>404 - Command Not Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background-color: black;
+      color: #00FF00;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .terminal {
+      max-width: 900px;
+      margin: auto;
+      border: 2px solid #00FF00;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #00FF00;
+    }
+
+    .prompt {
+      font-weight: bold;
+    }
+
+    a {
+      color: #00FF00;
+      text-decoration: underline;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: #00FF00;
+      animation: blink 0.8s infinite;
+      vertical-align: bottom;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <p><span class="prompt">Terminal@guest:~#</span> cd /unknown/path</p>
+    <p>bash: cd: /unknown/path: No such file or directory</p>
+
+    <p><span class="prompt">Terminal@guest:~#</span> status</p>
+    <p>Error 404: Page not found.</p>
+
+    <p><span class="prompt">Terminal@guest:~#</span> help</p>
+    <p>
+      Available actions:<br>
+      - <a href="/Terminal/">return to home</a><br>
+      - rethink your life choices
+    </p>
+
+    <p><span class="prompt">Terminal@guest:~#</span> <span class="cursor"></span></p>
+  </div>
+</body>
+</html>

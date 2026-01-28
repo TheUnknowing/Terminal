@@ -32,25 +32,12 @@
       color: #00FF00;
       text-decoration: underline;
     }
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 1.2em;
-      background-color: #00FF00;
-      animation: blink 0.8s infinite;
-      vertical-align: bottom;
-    }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
   </style>
 </head>
 <body>
   <div class="terminal">
-    <p><span class="prompt">Terminal@guest:~#</span> cd /unknown/path</p>
-    <p>bash: cd: /unknown/path: No such file or directory</p>
+    <p><span class="prompt">Terminal@guest:~#</span> whereami</p>
+    <p>bash: whereami: idk</p>
 
     <p><span class="prompt">Terminal@guest:~#</span> status</p>
     <p>Error 404: Page not found.</p>

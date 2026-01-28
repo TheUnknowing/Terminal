@@ -24,6 +24,10 @@
       box-shadow: 0 0 15px #00FF00;
     }
 
+    pre {
+      margin: 10px 0;
+    }
+
     .prompt {
       font-weight: bold;
     }
@@ -47,9 +51,45 @@
       Available actions:<br>
       - <a href="/Terminal/">return to home</a><br>
       - rethink your life choices
+      - pet cat
     </p>
 
     <p><span class="prompt">Terminal@guest:~#</span> <span class="cursor"></span></p>
   </div>
+  <script>
+    let petCount = 0;
+    const output = document.getElementById("output");
+
+    function petCat() {
+      petCount++;
+
+      let reaction = "The cat purrs softly.";
+      if (petCount >= 3) reaction = "The cat seems pleased.";
+      if (petCount >= 5) reaction = "The cat rolls on its back. Trust unlocked.";
+      if (petCount >= 8) reaction = "The cat accepts you as its human.";
+      if (petCount >= 12) reaction = "The cat is overstimulated. You have been scratched.";
+
+      const catArt = `
+ /\\_/\\
+( o.o )
+ > ^ <
+`;
+
+      output.innerHTML += `
+<p><span class="prompt">Terminal@guest:~#</span> pet cat</p>
+<pre>${catArt}</pre>
+<p>${reaction}</p>
+`;
+
+      output.scrollTop = output.scrollHeight;
+    }
+
+    // Intercepte le clic sur "pet cat"
+    document.addEventListener("click", (e) => {
+      if (e.target.textContent === "pet cat") {
+        petCat();
+      }
+    });
+  </script>
 </body>
 </html>

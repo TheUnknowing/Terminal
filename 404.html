@@ -31,11 +31,6 @@
     a {
       color: #00FF00;
       text-decoration: underline;
-      cursor: pointer;
-    }
-
-    pre {
-      margin: 10px 0;
     }
 
     .cursor {
@@ -53,58 +48,21 @@
   </style>
 </head>
 <body>
-
   <div class="terminal">
-    <div id="output">
-      <p><span class="prompt">Terminal@guest:~#</span> cd /unknown/path</p>
-      <p>bash: cd: /unknown/path: No such file or directory</p>
+    <p><span class="prompt">Terminal@guest:~#</span> whereami</p>
+    <p>bash: cd: whereami: idk lmao</p>
 
-      <p><span class="prompt">Terminal@guest:~#</span> status</p>
-      <p>Error 404: Page not found.</p>
+    <p><span class="prompt">Terminal@guest:~#</span> status</p>
+    <p>Error 404: Page not found.</p>
 
-      <p><span class="prompt">Terminal@guest:~#</span> help</p>
-      <p>
-        Available actions:<br>
-        - <a href="/Terminal/">return to home</a><br>
-        - <a>rethink your life choices</a><br>
-        - <a id="pet-cat">pet cat</a>
-      </p>
+    <p><span class="prompt">Terminal@guest:~#</span> help</p>
+    <p>
+      Available actions:<br>
+      - <a href="/Terminal/">return to home</a><br>
+      - rethink your life choices
+    </p>
 
-      <p><span class="prompt">Terminal@guest:~#</span> <span class="cursor"></span></p>
-    </div>
+    <p><span class="prompt">Terminal@guest:~#</span> <span class="cursor"></span></p>
   </div>
-
-  <script>
-  let petCount = 0;
-  const output = document.getElementById("output");
-
-  const catArt = `
- /\\_/\\
-( o.o )
- > ^ <
-`;
-
-  function petCat() {
-    petCount++;
-
-    let reaction = "The cat purrs softly.";
-    if (petCount >= 3) reaction = "The cat seems pleased.";
-    if (petCount >= 5) reaction = "The cat rolls on its back. Trust unlocked.";
-    if (petCount >= 8) reaction = "The cat accepts you as its human.";
-    if (petCount >= 12) reaction = "The cat is overstimulated. You have been scratched.";
-
-    output.innerHTML += `
-      <p><span class="prompt">Terminal@guest:~#</span> pet cat</p>
-      <pre>${catArt}</pre>
-      <p>${reaction}</p>
-    `;
-
-    output.scrollTop = output.scrollHeight;
-  }
-
-  // Clic explicite et fiable
-  document.getElementById("pet-cat").addEventListener("click", petCat);
-</script>
-
 </body>
 </html>
